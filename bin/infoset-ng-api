@@ -16,6 +16,11 @@ from gunicorn.six import iteritems
 
 # Infoset libraries
 try:
+    if "infoset-ng/bin" in str(os.getcwd()):
+        sys.path.append(os.getcwd()[:-4])
+    else :
+        sys.path.append(os.getcwd())
+    
     from infoset.utils import log
 except:
     print('You need to set your PYTHONPATH to include the infoset library')

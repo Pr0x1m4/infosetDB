@@ -13,6 +13,11 @@ import time
 
 # Infoset libraries
 try:
+    if "infoset-ng/bin" in str(os.getcwd()):
+        sys.path.append(os.getcwd()[:-4])
+    else :
+        sys.path.append(os.getcwd())
+    
     from infoset.agents import agent as Agent
 except:
     print('You need to set your PYTHONPATH to include the infoset library')
