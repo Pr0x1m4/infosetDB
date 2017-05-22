@@ -33,7 +33,7 @@ except ImportError:
         '\nNew Python packages installed. Please run this script again to '
         'complete the Infoset-NG installation.\n')
     # Must exit abnormally as the script didn't complete
-    sys.exit(2)
+    sys.exit(0)
 
 # Try to create a working PYTHONPATH
 _MAINT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

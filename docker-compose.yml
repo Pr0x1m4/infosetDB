@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    image: chenshuiluke/infoset-ng
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "6000:6000"
+    networks:
+      - webnet
+  mysql:
+    hostname: localhost
+    image: mysql:latest
+    volumes:
+      - ./docker_scripts/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: root
+      MYSQL_DATABASE: infoset
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - webnet      
+networks:
+  webnet:
+
