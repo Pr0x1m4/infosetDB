@@ -1,7 +1,7 @@
 version: "3"
 services:
-  web:
-    image: chenshuiluke/infoset-ng
+  infoset-ng:
+    image: .
     deploy:
       restart_policy:
         condition: on-failure
