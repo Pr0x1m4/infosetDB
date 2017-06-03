@@ -20,7 +20,7 @@ pipeline {
                 sh 'pip3 install setuptools'
                 sh 'pip3 install -r requirements.txt'
                 sh 'export PYTHONPATH=${PYTHONPATH}:$(pwd)/infoset/test'
-                sh 'python3 infoset/_do_all_tests.py'
+                sh 'python3 infoset/test/_do_all_tests.py'
             }
         }
         stage('Deploy') {
