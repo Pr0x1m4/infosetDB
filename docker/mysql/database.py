@@ -31,7 +31,7 @@ except ImportError:
 _MAINT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(
     os.path.join(_MAINT_DIRECTORY, os.pardir))
-if _ROOT_DIRECTORY.endswith('/infoset-ng') is True:
+if _ROOT_DIRECTORY.endswith('/mysql') is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
     print(
@@ -92,6 +92,7 @@ class _DatabaseSetup(object):
                 agent_label=general.encode(self.reserved),
                 agent_source=general.encode(self.reserved)
             )
+            print(CreateTable(record.__table__))
             database = db.Database()
             database.add(record, 1047)
 
@@ -248,7 +249,7 @@ class _DatabaseSetup(object):
             # Apply schemas
             shared.print_ok('Generating Schemas.')
 
-            with open('infoset.sql', 'a+') as infoset_mysql:
+            with open('infoset.sql', 'w') as infoset_mysql:
                 for mapping in mappings:
                     print(CreateTable(mapping.__table__))
                     infoset_mysql.write(str(CreateTable(mapping.__table__)))

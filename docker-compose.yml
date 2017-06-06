@@ -9,9 +9,7 @@ infoset:
     PYTHONPATH: /infoset-ng
 mysql:
   hostname: localhost
-  image: mysql:latest
-  volumes:
-    - ./docker/infoset-ng.sql:/docker-entrypoint-initdb.d/infoset-ng.sql
+  build: ./docker/mysql
   ports:
     - "3306:3306"
   environment:
