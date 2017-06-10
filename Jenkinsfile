@@ -29,6 +29,10 @@ pipeline {
             }
             steps{
                 echo 'Deploying....'
+                sh 'cp -r * /home/luke/infoset-ng'
+                sh 'cd /home/luke/'
+                sh 'cp infoset-ng/config.yaml.example infoset-ng/config.yaml'
+                sh 'infoset-ng/bin/systemd/infoset-ng-ingester --restart --force && python3 -u infoset-ng/infoset.py'
             }
         }
     }
