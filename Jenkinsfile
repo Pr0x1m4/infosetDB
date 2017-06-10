@@ -24,7 +24,10 @@ pipeline {
             }
         }
         stage('Deploy') {
-            steps {
+            when {
+                branch 'master'
+            }
+            steps{
                 echo 'Deploying....'
             }
         }
