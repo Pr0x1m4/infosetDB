@@ -31,7 +31,7 @@ pipeline {
                 echo 'Deploying....'
                 sh 'cp -r * /home/luke/infoset-ng'
                 sh 'cd /home/luke/'
-                sh 'cp infoset-ng/config.yaml.example infoset-ng/config.yaml'
+                sh 'cp infoset-ng/etc/config.yaml.example infoset-ng/etc/config.yaml'
                 sh 'infoset-ng/bin/systemd/infoset-ng-ingester --restart --force && infoset-ng/bin/systemd/infoset-ng-api --start --force'
             }
         }
