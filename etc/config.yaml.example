@@ -1,0 +1,17 @@
+main:
+  bind_port: 6000
+  db_hostname: localhost
+  db_name: infoset
+  db_password: password
+  db_username: root
+  ingest_cache_directory: /home/luke/infoset-ng/cache
+  ingest_pool_size: 20
+  interval: 60
+  listen_address: 127.0.0.1
+  log_directory: /home/luke/infoset-ng/log
+  log_level: debug
+  memcached_hostname: localhost
+  memcached_port: 11211
+  sqlalchemy_max_overflow: 10
+  sqlalchemy_pool_size: 10
+  username: luke
