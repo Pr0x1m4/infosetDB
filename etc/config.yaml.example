@@ -14,4 +14,4 @@ main:
   memcached_port: 11211
   sqlalchemy_max_overflow: 10
   sqlalchemy_pool_size: 10
-  username: luke
+  username: jenkins
