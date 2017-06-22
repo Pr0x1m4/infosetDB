@@ -24,6 +24,7 @@ from infoset.constants import API_PREFIX
 # Import API Blueprints
 from infoset.api.post import POST
 from infoset.api.status import STATUS
+from infoset.api.config_page import CONFIG_PAGE
 
 from infoset.api.resources.agents import AGENTS
 from infoset.api.resources.datapoints import DATAPOINTS
@@ -43,3 +44,4 @@ API.register_blueprint(AGENTS, url_prefix=API_PREFIX)
 API.register_blueprint(LASTCONTACTS, url_prefix=API_PREFIX)
 API.register_blueprint(DEVICES, url_prefix=API_PREFIX)
 API.register_blueprint(DEVICEAGENTS, url_prefix=API_PREFIX)
+API.register_blueprint(CONFIG_PAGE, url_prefix=API_PREFIX)

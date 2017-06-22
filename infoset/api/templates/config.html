@@ -1,0 +1,110 @@
+<!doctype html>
+<head>
+    <title>Infoset Config</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+</head>
+<body>
+    <div class="ui text container segment">   
+        <form class="ui form">
+            <div class="ui horizontal divider">
+                General
+            </div>       
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Infoset Username</label>
+                    <input name="infoset-username" placeholder="infoset" type="text">
+                </div>
+                <div class="field">
+                    <label>Listening Port</label>
+                    <input name="infoset-port" placeholder="6000" type="number">
+                </div>
+            </div>            
+            <div class="ui horizontal divider">
+                Database
+            </div>                 
+            <div class="ui two fields">
+                <div class="field">
+                    <label>DB Host</label>
+                    <input name="db-host" placeholder="localhost" type="text">
+                </div>
+                <div class="field">
+                    <label>DB Name</label>
+                    <input name="db-name" placeholder="infoset" type="text">
+                </div>
+            </div>
+            <div class="ui two fields">
+                <div class="field">
+                    <label>DB Username</label>
+                    <input name="db-username" placeholder="root" type="text">
+                </div>
+                <div class="field">
+                    <label>DB Password</label>
+                    <input name="db-password" placeholder="password" type="password">
+                </div>
+            </div>       
+            <div class="ui horizontal divider">
+                Ingester
+            </div>  
+            <div class="field">
+                <label>Cache Directory</label>
+                <input name="ingester-cache" placeholder="infoset-ng/cache" type="text">
+            </div>                
+            <div class="ui three fields">
+                <div class="field">
+                    <label>Pool Size</label>
+                    <input name="ingester-cache" placeholder="20" type="number">
+                </div>       
+                <div class="field">
+                    <label>Interval</label>
+                    <input name="ingester-interval" placeholder="60" type="number">
+                </div>       
+                <div class="field">
+                    <label>Listen Address</label>
+                    <input name="ingester-listen-address" placeholder="127.0.0.1" type="text">
+                </div>                       
+
+            </div>
+            <div class="ui horizontal divider">
+                Logging
+            </div>         
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Log Directory</label>
+                    <input name="log-cache" placeholder="infoset-ng/log" type="text">
+                </div>   
+                <div class="field">
+                    <label>Log Level</label>
+                    <input name="log-level" placeholder="debug" type="text">
+                </div>                       
+            </div>
+            <div class="ui horizontal divider">
+                Memcached
+            </div>          
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Memcached Host</label>
+                    <input name="memcached-host" placeholder="localhost" type="text">
+                </div>   
+                <div class="field">
+                    <label>Memcached Port</label>
+                    <input name="memcached-port" placeholder="11211" type="number">
+                </div>                   
+            </div>  
+            <div class="ui horizontal divider">
+                SQL Alchemy
+            </div>          
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Max Overflow</label>
+                    <input name="sqlalchemy-overflow" placeholder="10" type="number">
+                </div>   
+                <div class="field">
+                    <label>Pool Size</label>
+                    <input name="sqlalchemy-pool-size" placeholder="10" type="number">
+                </div>                   
+            </div>             
+            <button class="ui button green" type="submit">Submit</button>
+        </form>        
+    </div>
+</body>
