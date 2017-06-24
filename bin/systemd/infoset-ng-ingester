@@ -26,7 +26,8 @@ else:
 # Infoset libraries
 try:
     from infoset.agents import agent as Agent
-except:
+except Exception as e:
+    print(e) #An invalid PYTHONPATH is not the only reason an exception may occur
     print('You need to set your PYTHONPATH to include the infoset library')
     sys.exit(2)
 from infoset.cache import cache
