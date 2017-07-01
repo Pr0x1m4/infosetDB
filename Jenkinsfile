@@ -17,6 +17,8 @@ pipeline {
         }
         stage('Test') {
             steps {
+                sh 'virtualenv venv'
+                sh '.venv/bin/activate'
                 sh 'pip3 install setuptools'
                 sh 'pip3 install -r requirements.txt'
                 sh 'export PYTHONPATH=${PYTHONPATH}:$(pwd)/infoset/test'
