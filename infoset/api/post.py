@@ -2,7 +2,7 @@
 
 # Standard imports
 import json
-
+import redis
 # Flask imports
 from flask import Blueprint, request, abort
 
@@ -53,11 +53,13 @@ def receive(id_agent):
 
         # Create a hash of the devicename
         device_hash = general.hashstring(devicename, sha=1)
-        json_path = (
-            '%s/%s_%s_%s.json') % (cache_dir, timestamp, id_agent, device_hash)
+        
+        redis_key = (
+            '%s-%s-%s-%s') % (cache_dir, timestamp, id_agent, device_hash)
 
-        with open(json_path, "w+") as temp_file:
-            json.dump(data, temp_file)
+        r = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+        r.set(redis_key, data)
 
         # Return
         return 'OK'
