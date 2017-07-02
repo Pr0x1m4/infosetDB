@@ -87,6 +87,7 @@ class TestConfig(object):
 
         self._config = {
             'main': {
+                'db_file': 'infoset-db.db',
                 'log_directory': self._log_directory,
                 'log_level': 'debug',
                 'ingest_cache_directory': self._ingest_cache_directory,

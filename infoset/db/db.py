@@ -8,6 +8,7 @@ from sqlalchemy import and_
 from infoset.utils import log
 from infoset.db import POOL
 from infoset.db.db_orm import Agent
+import os
 
 
 class Database(object):
@@ -206,7 +207,6 @@ def connectivity():
             break
         valid = True
     except Exception as e:
-        #print(e)
         log_message = str(e)
         log.log2warning(1053, log_message)
 

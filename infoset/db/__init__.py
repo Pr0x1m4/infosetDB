@@ -7,6 +7,7 @@ Manages connection pooling among other things.
 
 # Main python libraries
 import os
+import sqlite3
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
@@ -51,6 +52,7 @@ def main():
 
     # Create DB connection pool
     if use_mysql is True:
+        create_sqlite_if_not_exist(config)
         URL = ('sqlite:///%s') % (
             config.db_file())
 
@@ -74,6 +76,104 @@ def main():
     # Populate the test engine if this is a test database
     if config.db_name().startswith('test_') is True:
         TEST_ENGINE = db_engine
+
+def create_sqlite_if_not_exist(config):
+    if not os.path.isfile(config.db_file()):
+        try:
+            connection = sqlite3.connect(config.db_file())
+            connection.execute("""CREATE TABLE iset_department (
+                idx_department BIGINT NOT NULL, 
+                code BLOB, 
+                name BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_department), 
+                UNIQUE (code)
+            );""")
+
+            connection.execute("""CREATE TABLE iset_device (
+                idx_device BIGINT NOT NULL, 
+                devicename BLOB, 
+                description BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_device), 
+                UNIQUE (devicename)
+            );""")
+
+            connection.execute("""CREATE TABLE iset_billcode (
+                idx_billcode BIGINT NOT NULL, 
+                code BLOB, 
+                name BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_billcode), 
+                UNIQUE (code)
+            );""")
+
+            connection.execute("""CREATE TABLE iset_agentname (
+                idx_agentname BIGINT NOT NULL, 
+                name BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_agentname), 
+                UNIQUE (name)
+            );""")  
+
+            connection.execute("""CREATE TABLE iset_agent (
+                idx_agent BIGINT NOT NULL, 
+                idx_agentname BIGINT DEFAULT '1' NOT NULL, 
+                id_agent BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_agent), 
+                FOREIGN KEY(idx_agentname) REFERENCES iset_agentname (idx_agentname), 
+                UNIQUE (id_agent)
+            );""")
+
+            connection.execute("""CREATE TABLE iset_deviceagent (
+                idx_deviceagent BIGINT NOT NULL, 
+                idx_device BIGINT DEFAULT '1' NOT NULL, 
+                idx_agent BIGINT DEFAULT '1' NOT NULL, 
+                enabled INTEGER DEFAULT '1', 
+                last_timestamp BIGINT DEFAULT '0' NOT NULL, 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_deviceagent), 
+                UNIQUE (idx_device, idx_agent), 
+                FOREIGN KEY(idx_device) REFERENCES iset_device (idx_device), 
+                FOREIGN KEY(idx_agent) REFERENCES iset_agent (idx_agent)
+            );""")    
+
+            connection.execute("""CREATE TABLE iset_datapoint (
+                idx_datapoint BIGINT NOT NULL, 
+                idx_deviceagent BIGINT DEFAULT '1' NOT NULL, 
+                idx_department BIGINT DEFAULT '1' NOT NULL, 
+                idx_billcode BIGINT DEFAULT '1' NOT NULL, 
+                id_datapoint BLOB, 
+                agent_label BLOB, 
+                agent_source BLOB, 
+                enabled INTEGER DEFAULT '1', 
+                billable INTEGER DEFAULT '0', 
+                timefixed_value BLOB, 
+                base_type INTEGER DEFAULT '1', 
+                last_timestamp BIGINT DEFAULT '0' NOT NULL, 
+                ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                PRIMARY KEY (idx_datapoint), 
+                FOREIGN KEY(idx_deviceagent) REFERENCES iset_deviceagent (idx_deviceagent), 
+                FOREIGN KEY(idx_department) REFERENCES iset_department (idx_department), 
+                FOREIGN KEY(idx_billcode) REFERENCES iset_billcode (idx_billcode), 
+                UNIQUE (id_datapoint)
+            );""")  
+            connection.close()
+        except sqlite3.Error as e:
+            print(str(e))
 
 
 def _add_engine_pidguard(engine):

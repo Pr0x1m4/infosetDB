@@ -34,6 +34,7 @@ class TestConfiguration(unittest.TestCase):
     cache_directory = tempfile.mkdtemp()
     good_config = ("""\
 main:
+    db_file: infoset-db.db
     log_directory: %s
     log_level: debug
     ingest_cache_directory: %s
