@@ -205,8 +205,10 @@ def connectivity():
         for _ in result:
             break
         valid = True
-    except:
-        pass
+    except Exception as e:
+        #print(e)
+        log_message = str(e)
+        log.log2warning(1053, log_message)
 
     database.close()
 

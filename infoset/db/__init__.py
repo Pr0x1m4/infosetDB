@@ -51,16 +51,13 @@ def main():
 
     # Create DB connection pool
     if use_mysql is True:
-        URL = ('mysql+pymysql://%s:%s@%s/%s?charset=utf8mb4') % (
-            config.db_username(), config.db_password(),
-            config.db_hostname(), config.db_name())
+        URL = ('sqlite:///%s') % (
+            config.db_file())
 
         # Add MySQL to the pool
         db_engine = create_engine(
             URL, echo=False,
-            encoding='utf8',
-            max_overflow=max_overflow,
-            pool_size=pool_size, pool_recycle=600)
+            encoding='utf8')
 
         # Fix for multiprocessing
         _add_engine_pidguard(db_engine)
