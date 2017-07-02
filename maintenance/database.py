@@ -221,9 +221,7 @@ class _DatabaseSetup(object):
             # Add MySQL to the pool
             engine = create_engine(
                 URL, echo=True,
-                encoding='utf8',
-                max_overflow=max_overflow,
-                pool_size=pool_size, pool_recycle=3600)
+                encoding='utf8')
 
             # Try to create the database
             shared.print_ok('Attempting to create database tables')

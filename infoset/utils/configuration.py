@@ -55,6 +55,26 @@ class Config(object):
         value = self.config_dict
         return value
 
+    def db_file(self):
+        """Determine the SQLite database file.
+
+        Args:
+            None
+
+        Returns:
+            value: configured SQLite db_file
+
+        """
+        # Initialize key variables
+        key = 'main'
+        sub_key = 'db_file'
+
+        # Process configuration
+        value = _key_sub_key(key, sub_key, self.config_dict)
+
+        # Return
+        return value
+
     def ingest_cache_directory(self):
         """Determine the ingest_cache_directory.
 
