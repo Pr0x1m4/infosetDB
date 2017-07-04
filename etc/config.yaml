@@ -8,7 +8,7 @@ main:
   ingest_cache_directory: cache
   ingest_pool_size: 20
   interval: 60
-  listen_address: 127.0.0.1
+  listen_address: 0.0.0.0
   log_directory: log
   log_level: debug
   memcached_hostname: localhost
