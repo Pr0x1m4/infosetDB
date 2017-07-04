@@ -9,7 +9,7 @@ from flask import Blueprint, request, abort
 # Infoset-ng imports
 from infoset.utils import general
 from infoset.api import CONFIG
-
+from infoset.api import REDIS
 
 # Define the POST global variable
 POST = Blueprint('POST', __name__)
@@ -53,11 +53,10 @@ def receive(id_agent):
 
         # Create a hash of the devicename
         device_hash = general.hashstring(devicename, sha=1)
-        json_path = (
-            '%s/%s_%s_%s.json') % (cache_dir, timestamp, id_agent, device_hash)
 
-        with open(json_path, "w+") as temp_file:
-            json.dump(data, temp_file)
+        redis_key = (
+            '%s-%s-%s-%s') % (cache_dir, timestamp, id_agent, device_hash)
+        REDIS.set(redis_key, data)
 
         # Return
         return 'OK'

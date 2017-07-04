@@ -13,3 +13,4 @@ requests
 SQLAlchemy
 SQLAlchemy-Utils
 Werkzeug
+redis

@@ -5,4 +5,4 @@ RUN apt-get -y install sudo expect python3 python3-pip python3-dev memcached pyt
 RUN pip3 install --upgrade pip
 EXPOSE 6000
 RUN pip3 install -r infoset-ng/requirements.txt
-CMD ["bash", "infoset-ng/run.sh"]
+CMD ["python3", "infoset-ng/docker/api.py"]

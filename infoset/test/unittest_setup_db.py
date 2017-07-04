@@ -70,10 +70,10 @@ class TestDatabase(object):
             create_database(self.url)
 
         # Alter the encoding for database character set
-        sql_string = (
-            'ALTER DATABASE %s CHARACTER SET utf8mb4 '
-            'COLLATE utf8mb4_general_ci') % (self.config.db_name())
-        self.engine.execute(sql_string)
+        # sql_string = (
+        #     'ALTER DATABASE %s CHARACTER SET utf8mb4 '
+        #     'COLLATE utf8mb4_general_ci') % (self.config.db_name())
+        # self.engine.execute(sql_string)
 
     def create_tables(self):
         """Create tables."""

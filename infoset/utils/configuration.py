@@ -55,6 +55,26 @@ class Config(object):
         value = self.config_dict
         return value
 
+    def db_file(self):
+        """Determine the SQLite database file.
+
+        Args:
+            None
+
+        Returns:
+            value: configured SQLite db_file
+
+        """
+        # Initialize key variables
+        key = 'main'
+        sub_key = 'db_file'
+
+        # Process configuration
+        value = _key_sub_key(key, sub_key, self.config_dict)
+
+        # Return
+        return value
+
     def ingest_cache_directory(self):
         """Determine the ingest_cache_directory.
 
@@ -350,6 +370,48 @@ class Config(object):
         # Default to localhost
         if result is None:
             result = 'localhost'
+        return result
+
+    def redis_hostname(self):
+        """Get redis_hostname.
+
+        Args:
+            None
+
+        Returns:
+            result: result
+
+        """
+        # Get result
+        key = 'main'
+        sub_key = 'redis_hostname'
+        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        # Default to localhost
+        if result is None:
+            result = 'localhost'
+        return result
+
+    def redis_port(self):
+        """Get memcached_port.
+
+        Args:
+            None
+
+        Returns:
+            result: result
+
+        """
+        # Get result
+        key = 'main'
+        sub_key = 'redis_port'
+        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        # Set default
+        if intermediate is None:
+            result = 6379
+        else:
+            result = int(intermediate)
         return result
 
     def sqlalchemy_max_overflow(self):

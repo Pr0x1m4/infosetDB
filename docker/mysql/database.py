@@ -13,6 +13,8 @@ import os
 try:
     import yaml
     from sqlalchemy import create_engine
+    from sqlalchemy.dialects import mysql
+    from sqlalchemy.schema import CreateTable
     import pymysql
 except ImportError:
     import pip
@@ -29,7 +31,7 @@ except ImportError:
 _MAINT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(
     os.path.join(_MAINT_DIRECTORY, os.pardir))
-if _ROOT_DIRECTORY.endswith('/infoset-ng') is True:
+if _ROOT_DIRECTORY.endswith('/mysql') is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
     print(
@@ -90,6 +92,7 @@ class _DatabaseSetup(object):
                 agent_label=general.encode(self.reserved),
                 agent_source=general.encode(self.reserved)
             )
+            print(CreateTable(record.__table__))
             database = db.Database()
             database.add(record, 1047)
 
@@ -216,12 +219,16 @@ class _DatabaseSetup(object):
         max_overflow = 25
         config = self.config
 
+        mappings = [Agent, Department, Device, Billcode, DeviceAgent, Datapoint, AgentName] 
+
         # Create DB connection pool
         if use_mysql is True:
             # Add MySQL to the pool
             engine = create_engine(
-                URL, echo=True,
-                encoding='utf8')
+                URL, echo=False,
+                encoding='utf8',
+                max_overflow=max_overflow,
+                pool_size=pool_size, pool_recycle=3600)
 
             # Try to create the database
             shared.print_ok('Attempting to create database tables')
@@ -240,8 +247,13 @@ class _DatabaseSetup(object):
                 log.log2die(1046, log_message)
 
             # Apply schemas
-            shared.print_ok('Applying Schemas.')
-            BASE.metadata.create_all(engine)
+            shared.print_ok('Generating Schemas.')
+
+            with open('infoset.sql', 'w') as infoset_mysql:
+                for mapping in mappings:
+                    print(CreateTable(mapping.__table__))
+                    infoset_mysql.write(str(CreateTable(mapping.__table__)))
+            infoset_mysql.close()
 
             # Insert database entries
             self._insert_agent_device()

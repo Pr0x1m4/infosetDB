@@ -1,0 +1,110 @@
+<!doctype html>
+<head>
+    <title>Infoset Config</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+</head>
+<body>
+    <div class="ui text container segment">   
+        <form class="ui form" action="/infoset/api/v1/config/update" method="POST">
+            <div class="ui horizontal divider">
+                General
+            </div>       
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Infoset Username</label>
+                    <input name="infoset-username" placeholder="infoset" type="text" value="{{config['infoset-username']}}">
+                </div>
+                <div class="field">
+                    <label>Listening Port</label>
+                    <input name="infoset-port" placeholder="6000" type="number" value="{{config['infoset-port']}}">
+                </div>
+            </div>            
+            <div class="ui horizontal divider">
+                Database
+            </div>                 
+            <div class="ui two fields">
+                <div class="field">
+                    <label>DB Host</label>
+                    <input name="db-host" placeholder="localhost" type="text" value="{{config['db-host']}}">
+                </div>
+                <div class="field">
+                    <label>DB Name</label>
+                    <input name="db-name" placeholder="infoset" type="text" value="{{config['db-name']}}">
+                </div>
+            </div>
+            <div class="ui two fields">
+                <div class="field">
+                    <label>DB Username</label>
+                    <input name="db-username" placeholder="root" type="text" value="{{config['db-username']}}">
+                </div>
+                <div class="field">
+                    <label>DB Password</label>
+                    <input name="db-password" placeholder="password" type="password" value="{{config['db-password']}}">
+                </div>
+            </div>       
+            <div class="ui horizontal divider">
+                Ingester
+            </div>  
+            <div class="field">
+                <label>Cache Directory</label>
+                <input name="ingester-cache" placeholder="infoset-ng/cache" type="text" value="{{config['ingester-cache']}}">
+            </div>                
+            <div class="ui three fields">
+                <div class="field">
+                    <label>Pool Size</label>
+                    <input name="ingester-pool-size" placeholder="20" type="number" value="{{config['ingester-pool-size']}}">
+                </div>       
+                <div class="field">
+                    <label>Interval</label>
+                    <input name="ingester-interval" placeholder="60" type="number" value="{{config['ingester-interval']}}">
+                </div>       
+                <div class="field">
+                    <label>Listen Address</label>
+                    <input name="ingester-listen-address" placeholder="127.0.0.1" type="text" value="{{config['ingester-listen-address']}}">
+                </div>                       
+
+            </div>
+            <div class="ui horizontal divider">
+                Logging
+            </div>         
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Log Directory</label>
+                    <input name="log-directory" placeholder="infoset-ng/log" type="text" value="{{config['log-directory']}}">
+                </div>   
+                <div class="field">
+                    <label>Log Level</label>
+                    <input name="log-level" placeholder="debug" type="text" value="{{config['log-level']}}">
+                </div>                       
+            </div>
+            <div class="ui horizontal divider">
+                Memcached
+            </div>          
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Memcached Host</label>
+                    <input name="memcached-host" placeholder="localhost" type="text" value="{{config['memcached-host']}}">
+                </div>   
+                <div class="field">
+                    <label>Memcached Port</label>
+                    <input name="memcached-port" placeholder="11211" type="number" value="{{config['memcached-port']}}">
+                </div>                   
+            </div>  
+            <div class="ui horizontal divider">
+                SQL Alchemy
+            </div>          
+            <div class="ui two fields">
+                <div class="field">
+                    <label>Max Overflow</label>
+                    <input name="sqlalchemy-overflow" placeholder="10" type="number" value="{{config['sqlalchemy-overflow']}}">
+                </div>   
+                <div class="field">
+                    <label>Pool Size</label>
+                    <input name="sqlalchemy-pool-size" placeholder="10" type="number" value="{{config['sqlalchemy-pool-size']}}">
+                </div>                   
+            </div>             
+            <button class="ui button green" type="submit">Submit</button>
+        </form>        
+    </div>
+</body>

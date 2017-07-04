@@ -8,8 +8,8 @@ Manages connection pooling among other things.
 # SQLobject stuff
 from sqlalchemy import UniqueConstraint, PrimaryKeyConstraint, text
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.mysql import BIGINT, DATETIME, INTEGER
-from sqlalchemy.dialects.mysql import NUMERIC, VARBINARY
+from sqlalchemy.dialects.sqlite import DATETIME, INTEGER
+from sqlalchemy.dialects.sqlite import NUMERIC, BLOB
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 
@@ -30,18 +30,17 @@ class Device(BASE):
         )
 
     idx_device = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    devicename = Column(VARBINARY(512), nullable=True, default=None)
+    devicename = Column(BLOB, nullable=True, default=None)
 
-    description = Column(VARBINARY(512), nullable=True, default=None)
+    description = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -60,25 +59,24 @@ class DeviceAgent(BASE):
         )
 
     idx_deviceagent = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
     idx_device = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_device.idx_device'),
+        INTEGER(), ForeignKey('iset_device.idx_device'),
         nullable=False, server_default='1')
 
     idx_agent = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_agent.idx_agent'),
+        INTEGER(), ForeignKey('iset_agent.idx_agent'),
         nullable=False, server_default='1')
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     last_timestamp = Column(
-        BIGINT(unsigned=True), nullable=False, server_default='0')
+        INTEGER(), nullable=False, server_default='0')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -97,10 +95,10 @@ class Data(BASE):
         )
 
     idx_datapoint = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_datapoint.idx_datapoint'),
+        INTEGER(), ForeignKey('iset_datapoint.idx_datapoint'),
         nullable=False, server_default='1')
 
-    timestamp = Column(BIGINT(unsigned=True), nullable=False, default='1')
+    timestamp = Column(INTEGER(), nullable=False, default='1')
 
     value = Column(NUMERIC(40, 10), default=None)
 
@@ -114,20 +112,19 @@ class Agent(BASE):
     }
 
     idx_agent = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
     idx_agentname = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_agentname.idx_agentname'),
+        INTEGER(), ForeignKey('iset_agentname.idx_agentname'),
         nullable=False, server_default='1')
 
-    id_agent = Column(VARBINARY(512), unique=True, nullable=True, default=None)
+    id_agent = Column(BLOB, unique=True, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -146,16 +143,15 @@ class AgentName(BASE):
         )
 
     idx_agentname = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    name = Column(VARBINARY(512), nullable=True, default=None)
+    name = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -172,42 +168,41 @@ class Datapoint(BASE):
         )
 
     idx_datapoint = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
     idx_deviceagent = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_deviceagent.idx_deviceagent'),
+        INTEGER(), ForeignKey('iset_deviceagent.idx_deviceagent'),
         nullable=False, server_default='1')
 
     idx_department = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_department.idx_department'),
+        INTEGER(), ForeignKey('iset_department.idx_department'),
         nullable=False, server_default='1')
 
     idx_billcode = Column(
-        BIGINT(unsigned=True), ForeignKey('iset_billcode.idx_billcode'),
+        INTEGER(), ForeignKey('iset_billcode.idx_billcode'),
         nullable=False, server_default='1')
 
     id_datapoint = Column(
-        VARBINARY(512), unique=True, nullable=True, default=None)
+        BLOB, unique=True, nullable=True, default=None)
 
-    agent_label = Column(VARBINARY(512), nullable=True, default=None)
+    agent_label = Column(BLOB, nullable=True, default=None)
 
-    agent_source = Column(VARBINARY(512), nullable=True, default=None)
+    agent_source = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
-    billable = Column(INTEGER(unsigned=True), server_default='0')
+    billable = Column(INTEGER(), server_default='0')
 
-    timefixed_value = Column(VARBINARY(512), nullable=True, default=None)
+    timefixed_value = Column(BLOB, nullable=True, default=None)
 
-    base_type = Column(INTEGER(unsigned=True), server_default='1')
+    base_type = Column(INTEGER(), server_default='1')
 
     last_timestamp = Column(
-        BIGINT(unsigned=True), nullable=False, server_default='0')
+        INTEGER(), nullable=False, server_default='0')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -226,18 +221,17 @@ class Department(BASE):
         )
 
     idx_department = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    code = Column(VARBINARY(512), nullable=True, default=None)
+    code = Column(BLOB, nullable=True, default=None)
 
-    name = Column(VARBINARY(512), nullable=True, default=None)
+    name = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -256,18 +250,17 @@ class Billcode(BASE):
         )
 
     idx_billcode = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    code = Column(VARBINARY(512), nullable=True, default=None)
+    code = Column(BLOB, nullable=True, default=None)
 
-    name = Column(VARBINARY(512), nullable=True, default=None)
+    name = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
@@ -286,18 +279,17 @@ class Configuration(BASE):
         )
 
     idx_configuration = Column(
-        BIGINT(unsigned=True), primary_key=True,
+        INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    config_key = Column(VARBINARY(512), nullable=True, default=None)
+    config_key = Column(BLOB, nullable=True, default=None)
 
-    config_value = Column(VARBINARY(512), nullable=True, default=None)
+    config_value = Column(BLOB, nullable=True, default=None)
 
-    enabled = Column(INTEGER(unsigned=True), server_default='1')
+    enabled = Column(INTEGER(), server_default='1')
 
     ts_modified = Column(
-        DATETIME, server_default=text(
-            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),)
+        DATETIME, server_default=text('CURRENT_TIMESTAMP'))
 
     ts_created = Column(
         DATETIME, server_default=text('CURRENT_TIMESTAMP'))
