@@ -372,6 +372,48 @@ class Config(object):
             result = 'localhost'
         return result
 
+    def redis_hostname(self):
+        """Get redis_hostname.
+
+        Args:
+            None
+
+        Returns:
+            result: result
+
+        """
+        # Get result
+        key = 'main'
+        sub_key = 'redis_hostname'
+        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        # Default to localhost
+        if result is None:
+            result = 'localhost'
+        return result
+
+    def redis_port(self):
+        """Get memcached_port.
+
+        Args:
+            None
+
+        Returns:
+            result: result
+
+        """
+        # Get result
+        key = 'main'
+        sub_key = 'redis_port'
+        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        # Set default
+        if intermediate is None:
+            result = 6379
+        else:
+            result = int(intermediate)
+        return result
+
     def sqlalchemy_max_overflow(self):
         """Get sqlalchemy_max_overflow.
 

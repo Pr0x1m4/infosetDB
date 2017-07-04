@@ -2,14 +2,14 @@
 
 # Standard imports
 import json
-import redis
+
 # Flask imports
 from flask import Blueprint, request, abort
 
 # Infoset-ng imports
 from infoset.utils import general
 from infoset.api import CONFIG
-
+from infoset.api import REDIS
 
 # Define the POST global variable
 POST = Blueprint('POST', __name__)
@@ -53,13 +53,10 @@ def receive(id_agent):
 
         # Create a hash of the devicename
         device_hash = general.hashstring(devicename, sha=1)
-        
+
         redis_key = (
             '%s-%s-%s-%s') % (cache_dir, timestamp, id_agent, device_hash)
-
-        r = redis.StrictRedis(host='localhost', port=6379, db=0)
-
-        r.set(redis_key, data)
+        REDIS.set(redis_key, data)
 
         # Return
         return 'OK'

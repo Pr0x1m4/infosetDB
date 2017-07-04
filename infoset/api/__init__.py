@@ -13,6 +13,9 @@ CONFIG = configuration.Config()
 #############################################################################
 #############################################################################
 
+from infoset.utils import redis
+REDIS = redis.Redis()
+
 # Configure the cache
 CACHE = Cache(config={
     'CACHE_TYPE': 'memcached',
