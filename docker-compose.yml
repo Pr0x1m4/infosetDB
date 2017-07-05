@@ -3,16 +3,12 @@ infoset:
   ports:
     - "6000:6000"
   links:
-    - mysql
+    - redis
   hostname: localhost
   environment:
     PYTHONPATH: /infoset-ng
-mysql:
+redis:
   hostname: localhost
-  build: ./docker/mysql
+  image: redis:latest
   ports:
-    - "3306:3306"
-  environment:
-    MYSQL_USER: root
-    MYSQL_DATABASE: infoset
-    MYSQL_ROOT_PASSWORD: password
+    - "6379:6379"

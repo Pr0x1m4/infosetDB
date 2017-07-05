@@ -1,4 +1,6 @@
 Flask
+flask
+setuptools
 Flask-RESTful
 Flask-Caching
 gunicorn
