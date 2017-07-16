@@ -58,8 +58,7 @@ def main():
 
         # Add MySQL to the pool
         db_engine = create_engine(
-            URL, echo=False,
-            encoding='utf8')
+            URL, echo=False)
 
         # Fix for multiprocessing
         _add_engine_pidguard(db_engine)
@@ -76,6 +75,7 @@ def main():
     # Populate the test engine if this is a test database
     if config.db_name().startswith('test_') is True:
         TEST_ENGINE = db_engine
+
 
 def create_sqlite_if_not_exist(config):
     if not os.path.isfile(config.db_file()):
@@ -122,12 +122,12 @@ def create_sqlite_if_not_exist(config):
                 ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
                 PRIMARY KEY (idx_agentname), 
                 UNIQUE (name)
-            );""")  
+            );""")
 
             connection.execute("""CREATE TABLE iset_agent (
                 idx_agent BIGINT NOT NULL, 
                 idx_agentname BIGINT DEFAULT '1' NOT NULL, 
-                id_agent BLOB, 
+                id_agent VARCHAR(100), 
                 enabled INTEGER DEFAULT '1', 
                 ts_modified DATETIME DEFAULT CURRENT_TIMESTAMP, 
                 ts_created DATETIME DEFAULT CURRENT_TIMESTAMP, 
@@ -148,7 +148,7 @@ def create_sqlite_if_not_exist(config):
                 UNIQUE (idx_device, idx_agent), 
                 FOREIGN KEY(idx_device) REFERENCES iset_device (idx_device), 
                 FOREIGN KEY(idx_agent) REFERENCES iset_agent (idx_agent)
-            );""")    
+            );""")
 
             connection.execute("""CREATE TABLE iset_datapoint (
                 idx_datapoint BIGINT NOT NULL, 
@@ -170,7 +170,7 @@ def create_sqlite_if_not_exist(config):
                 FOREIGN KEY(idx_department) REFERENCES iset_department (idx_department), 
                 FOREIGN KEY(idx_billcode) REFERENCES iset_billcode (idx_billcode), 
                 UNIQUE (id_datapoint)
-            );""")  
+            );""")
             connection.close()
         except sqlite3.Error as e:
             print(str(e))
