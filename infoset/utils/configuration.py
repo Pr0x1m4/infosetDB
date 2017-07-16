@@ -414,6 +414,19 @@ class Config(object):
             result = int(intermediate)
         return result
 
+    def redis_url(self):
+        """Get redis url.
+
+        Args:
+            None
+
+        Returns:
+            result: result
+
+        """
+
+        return ("redis://%s:%s/0") % (self.redis_hostname(), self.redis_port())
+
     def sqlalchemy_max_overflow(self):
         """Get sqlalchemy_max_overflow.
 
@@ -474,8 +487,9 @@ class Config(object):
 
         """
         # Get new result
-        result = ('%s/infoset-ng.log') % (self.log_directory())
-
+        # print()
+        #result = ('%s/infoset-ng.log') % (self.log_directory())
+        result = "./log/infoset-ng.log"
         # Return
         return result
 
