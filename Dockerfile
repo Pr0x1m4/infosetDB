@@ -1,8 +1,8 @@
-FROM ubuntu:xenial
+FROM python:3
 ADD . infoset-ng
 RUN apt-get update
-RUN apt-get -y install sudo expect python3 python3-pip python3-dev memcached python3-setuptools
-RUN pip3 install --upgrade pip
+RUN apt-get -y install python3 python3-pip python3-dev python3-setuptools
+WORKDIR infoset-ng
 EXPOSE 6000
-RUN pip3 install -r infoset-ng/requirements.txt
-CMD ["python3", "infoset-ng/docker/api.py"]
+RUN pip3 install -r requirements.txt
+CMD ["python3", "docker/api.py"]
