@@ -155,7 +155,8 @@ class _DatabaseSetup(object):
         # Add agent
         if db_agent.idx_agent_exists(idx_agent) is False:
             # Generate an Agent ID and add a record in the database
-            record = Agent(id_agent=general.encode(self.reserved))
+            record = Agent(
+                id_agent=general.encode(self.reserved))
             database = db.Database()
             database.add(record, 1109)
 
@@ -170,7 +171,8 @@ class _DatabaseSetup(object):
 
         # Add to Agent / Device table
         if db_deviceagent.device_agent_exists(idx_device, idx_agent) is False:
-            record = DeviceAgent(idx_device=idx_device, idx_agent=idx_agent)
+            record = DeviceAgent(
+                idx_device=idx_device, idx_agent=idx_agent)
             database = db.Database()
             database.add(record, 1107)
 
@@ -219,6 +221,9 @@ class _DatabaseSetup(object):
         # Create DB connection pool
         if use_mysql is True:
             # Add MySQL to the pool
+            URL = ('sqlite:///%s') % (
+                config.db_file())
+
             engine = create_engine(
                 URL, echo=True,
                 encoding='utf8')
@@ -229,7 +234,7 @@ class _DatabaseSetup(object):
                 sql_string = (
                     'ALTER DATABASE %s CHARACTER SET utf8mb4 '
                     'COLLATE utf8mb4_general_ci') % (config.db_name())
-                engine.execute(sql_string)
+                # engine.execute(sql_string)
             except:
                 log_message = (
                     'Cannot connect to database %s. '
