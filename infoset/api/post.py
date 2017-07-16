@@ -2,17 +2,33 @@
 
 # Standard imports
 import json
+import celery
+import pprint
 
 # Flask imports
 from flask import Blueprint, request, abort
+from celery import Celery
 
 # Infoset-ng imports
 from infoset.utils import general
 from infoset.api import CONFIG
 from infoset.api import REDIS
+from infoset.cache import cache
+from infoset.utils import log
+
 
 # Define the POST global variable
 POST = Blueprint('POST', __name__)
+
+# Define celery instance
+celery = Celery("infoset", broker=CONFIG.redis_url(),
+                backend=CONFIG.redis_url())
+
+
+@celery.task
+def process_cache(redis_key):
+    data = REDIS.get(redis_key)
+    processed = cache.ProcessRedisCache(data)
 
 
 @POST.route('/receive/<id_agent>', methods=['POST'])
@@ -34,7 +50,6 @@ def receive(id_agent):
 
     # Get JSON from incoming agent POST
     data = request.json
-
     # Make sure all the important keys are available
     keys = ['timestamp', 'id_agent', 'devicename']
     for key in keys:
@@ -55,8 +70,10 @@ def receive(id_agent):
         device_hash = general.hashstring(devicename, sha=1)
 
         redis_key = (
-            '%s-%s-%s-%s') % (cache_dir, timestamp, id_agent, device_hash)
+            '%s-%s-%s') % (timestamp, id_agent, device_hash)
         REDIS.set(redis_key, data)
+
+        result = process_cache.delay(redis_key)
 
         # Return
         return 'OK'
