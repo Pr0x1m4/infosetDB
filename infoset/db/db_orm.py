@@ -27,11 +27,11 @@ class Device(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_device = Column(
         INTEGER(), primary_key=True,
-        autoincrement=True, nullable=False)
+        autoincrement=True)
 
     devicename = Column(BLOB, nullable=True, default=None)
 
@@ -56,11 +56,11 @@ class DeviceAgent(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_deviceagent = Column(
         INTEGER(), primary_key=True,
-        autoincrement=True, nullable=False)
+        autoincrement=True)
 
     idx_device = Column(
         INTEGER(), ForeignKey('iset_device.idx_device'),
@@ -92,11 +92,11 @@ class Data(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_datapoint = Column(
         INTEGER(), ForeignKey('iset_datapoint.idx_datapoint'),
-        nullable=False, server_default='1')
+        server_default='1')
 
     timestamp = Column(INTEGER(), nullable=False, default='1')
 
@@ -113,7 +113,7 @@ class Agent(BASE):
 
     idx_agent = Column(
         INTEGER(), primary_key=True,
-        autoincrement=True, nullable=False)
+        autoincrement=True)
 
     idx_agentname = Column(
         INTEGER(), ForeignKey('iset_agentname.idx_agentname'),
@@ -140,11 +140,11 @@ class AgentName(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_agentname = Column(
         INTEGER(), primary_key=True,
-        autoincrement=True, nullable=False)
+        autoincrement=True)
 
     name = Column(BLOB, nullable=True, default=None)
 
@@ -165,23 +165,23 @@ class Datapoint(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_datapoint = Column(
         INTEGER(), primary_key=True,
-        autoincrement=True, nullable=False)
+        autoincrement=True)
 
     idx_deviceagent = Column(
         INTEGER(), ForeignKey('iset_deviceagent.idx_deviceagent'),
-        nullable=False, server_default='1')
+        server_default='1')
 
     idx_department = Column(
         INTEGER(), ForeignKey('iset_department.idx_department'),
-        nullable=False, server_default='1')
+        server_default='1')
 
     idx_billcode = Column(
         INTEGER(), ForeignKey('iset_billcode.idx_billcode'),
-        nullable=False, server_default='1')
+        server_default='1')
 
     id_datapoint = Column(
         BLOB, unique=True, nullable=True, default=None)
@@ -218,7 +218,7 @@ class Department(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_department = Column(
         INTEGER(), primary_key=True,
@@ -247,7 +247,7 @@ class Billcode(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_billcode = Column(
         INTEGER(), primary_key=True,
@@ -276,7 +276,7 @@ class Configuration(BASE):
         {
             'mysql_engine': 'InnoDB'
         }
-        )
+    )
 
     idx_configuration = Column(
         INTEGER(), primary_key=True,
