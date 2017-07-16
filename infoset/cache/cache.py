@@ -222,6 +222,89 @@ class _ProcessAgentCache(object):
         return (success, len(datapoints))
 
 
+class ProcessRedisCache(object):
+
+    def __init__(self, data):
+        do_update = False
+        success = None
+        agent_data = {
+            'devicename': None,
+            'id_agent': None,
+            'sources': [],
+            'timeseries': [],
+            'timefixed': [],
+            'max_timestamp': 0
+        }
+
+        ingest = drain.Drain(filename=None, data=data)
+
+        if ingest.valid() is False:
+            log_message = (
+                'Cache data at timestamp %s is invalid. Moving.'
+                '') % (ingest.timestamp())
+            log.log2warning(1054, log_message)
+        else:
+            agent_data['timeseries'] = ingest.timeseries()
+            agent_data['timefixed'] = ingest.timefixed()
+            agent_data['sources'] = ingest.sources()
+            agent_data['devicename'] = ingest.devicename()
+            agent_data['id_agent'] = ingest.id_agent()
+            agent_data['agent_name'] = ingest.agent()
+            agent_data['max_timestamp'] = ingest.timestamp()
+
+            # Upadate and note success
+            (success, datapoints_processed) = self._do_update(
+                agent_data)
+            print("**************************")
+            print(success)
+            print("**************************")
+
+    def _do_update(self, agent_data):
+        """Update the database using threads."""
+        # Initialize key variables
+        max_timestamp = agent_data['max_timestamp']
+
+        # Add datapoints to the database
+        db_prepare = _PrepareDatabase(agent_data)
+        db_prepare.add_datapoints()
+
+        # Get the latest datapoints
+        datapoints = db_prepare.get_datapoints()
+
+        # Get the assigned index values for the device and agent
+        idx_device = db_prepare.idx_device()
+        idx_agent = db_prepare.idx_agent()
+
+        # Update database with data
+        db_update = _UpdateDB(agent_data, datapoints)
+        success = db_update.update()
+
+        #####################################################################
+        #####################################################################
+        #
+        # We need to update the database with last update data and purge
+        # files whether successful or not. This is a precaution to prevent
+        # database corruption if multiple sets of bogus data is posted with
+        # valid data
+        #
+        #####################################################################
+        #####################################################################
+
+        # Update database table timestamps
+        update_timestamps = _UpdateLastTimestamp(
+            idx_device, idx_agent, max_timestamp)
+        update_timestamps.deviceagent()
+        update_timestamps.datapoint()
+
+        # Purge source files. Only done after complete
+        # success of database updates. If not we could lose data in the
+        # event of an ingester crash. Ingester would re-read the files
+        # and process the non-duplicates, while deleting the duplicates.
+
+        # Return
+        return (success, len(datapoints))
+
+
 class _PrepareDatabase(object):
     """Prepare database for insertion of new datapoint values.
 
@@ -245,7 +328,6 @@ class _PrepareDatabase(object):
         """
         # Initialize key variables
         self.agent_data = agent_data
-
         # Update Agent, Device and DeviceAgent database tables if
         # Device and agent are not already there
         self._idx_agent = self.idx_agent()

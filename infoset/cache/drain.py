@@ -32,7 +32,7 @@ class Drain(object):
 
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename, data):
         """Method initializing the class.
 
         Args:
@@ -51,7 +51,7 @@ class Drain(object):
         data_types = ['timeseries', 'timefixed']
 
         # Ingest data
-        validator = validate.ValidateCache(filename)
+        validator = validate.ValidateCache(filepath=None, data=data)
         information = validator.getinfo()
 
         # Log if data is bad
