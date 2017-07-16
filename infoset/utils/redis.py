@@ -1,5 +1,7 @@
 # Redis library
 import redis
+import pickle
+import json
 
 # Infoset-ng imports
 from infoset.api import CONFIG
@@ -17,7 +19,8 @@ class Redis(object):
         """
         host = CONFIG.redis_hostname()
         port = CONFIG.redis_port()
-        self.redis = redis.StrictRedis(host=host, port=port, db=0)
+        self.redis = redis.StrictRedis(
+            host=host, port=port, db=0, decode_responses=True)
 
     def set(self, key, data):
         """Function for setting keys to redis instance.
@@ -29,4 +32,17 @@ class Redis(object):
             Text response of Received
 
         """
-        self.redis.set(key, data)
+        self.redis.set(str(key), json.dumps(data))
+
+    def get(self, key):
+        """Function for getting data from redis instance.
+
+        Args:
+            id_agent: Unique Identifier of an Infoset Agent
+
+        Returns:
+            Text response of Received
+
+        """
+        data = json.loads(self.redis.get(key))
+        return data
