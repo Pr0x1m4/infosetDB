@@ -7,6 +7,11 @@ infoset:
   hostname: localhost
   environment:
     PYTHONPATH: /infoset-ng
+celery:
+  build: .
+  command: celery worker -A infoset.api.post.celery --loglevel=debug
+  links:
+    - redis
 redis:
   hostname: localhost
   image: redis:latest
