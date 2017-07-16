@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Infoset DB',
-    version='0.1.2',
+    version='2.1.0',
     packages=['infosetdb', ],
     license='Apache License 2',
 )
