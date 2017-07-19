@@ -12,6 +12,8 @@ celery:
   command: celery worker -A infoset.api.post.celery --loglevel=debug
   links:
     - redis
+  volumes:
+    - ./:/infoset-ng
 redis:
   hostname: localhost
   image: redis:latest
