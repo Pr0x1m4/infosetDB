@@ -255,9 +255,6 @@ class ProcessRedisCache(object):
             # Upadate and note success
             (success, datapoints_processed) = self._do_update(
                 agent_data)
-            print("**************************")
-            print(success)
-            print("**************************")
 
     def _do_update(self, agent_data):
         """Update the database using threads."""
@@ -622,6 +619,7 @@ class _UpdateDB(object):
         # Update data
         for item in data:
             # Process datapoint values
+
             id_datapoint = item['id_datapoint']
             value = item['value']
             timestamp = item['timestamp']
