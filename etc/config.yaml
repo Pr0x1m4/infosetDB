@@ -1,5 +1,5 @@
 main:
-  db_file: infoset-db.db
+  db_file: ./infoset/db/infoset-db.db
   bind_port: 6000
   db_hostname: localhost
   db_name: infoset
