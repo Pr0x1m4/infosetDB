@@ -12,14 +12,14 @@ from infoset.utils import memory
 from infoset.db import db_datapoint
 from infoset.db import db_multitable
 from infoset.db import db_data
-from infoset.api import CACHE, CONFIG
+from infoset.api import CONFIG
 
 # Define the AGENT global variable
 DATAPOINTS = Blueprint('DATAPOINTS', __name__)
 
 
 @DATAPOINTS.route('/datapoints/<idx_datapoint>')
-@CACHE.cached(key_prefix=memory.flask_cache_key)
+
 def datapoints(idx_datapoint):
     """Get datapoint data filtered by datapoint index value.
 
@@ -39,7 +39,7 @@ def datapoints(idx_datapoint):
 
 
 @DATAPOINTS.route('/datapoints')
-@CACHE.cached(key_prefix=memory.flask_cache_key)
+
 def datapoints_query():
     """Get datapoint data filtered by query string values.
 
@@ -73,7 +73,7 @@ def datapoints_query():
 
 
 @DATAPOINTS.route('/datapoints/<int:value>/data')
-@CACHE.cached(key_prefix=memory.flask_cache_key)
+
 def getdata(value):
     """Get Agent data from the DB by idx value.
 
@@ -122,7 +122,7 @@ def getdata(value):
 
 
 @DATAPOINTS.route('/datapoints/all/summary')
-@CACHE.cached(key_prefix=memory.flask_cache_key)
+
 def db_datapoint_summary():
     """Get Agent data from the DB by id_agent value.
 
@@ -141,7 +141,7 @@ def db_datapoint_summary():
 
 
 @DATAPOINTS.route('/datapoints/all/summarylist')
-@CACHE.cached(key_prefix=memory.flask_cache_key)
+
 def db_datapoint_summary_list():
     """Get Datapoint summary data from the DB as a list of dicts.
 
