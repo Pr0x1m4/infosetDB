@@ -5,15 +5,13 @@ from flask import Blueprint, jsonify
 
 # Infoset-ng imports
 from infoset.db import db_deviceagent
-from infoset.api import CACHE
-
 
 # Define the DEVICEAGENTS global variable
 DEVICEAGENTS = Blueprint('DEVICEAGENTS', __name__)
 
 
 @DEVICEAGENTS.route('/deviceagents/<int:value>')
-@CACHE.cached()
+
 def deviceagents_query(value):
     """Get DeviceAgent data from the DB by idx value.
 
@@ -36,7 +34,7 @@ def deviceagents_query(value):
 
 
 @DEVICEAGENTS.route('/deviceagents')
-@CACHE.cached()
+
 def deviceagents():
     """Get all DeviceAgent data from the DB.
 
