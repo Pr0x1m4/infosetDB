@@ -9,6 +9,7 @@ import locale
 import hashlib
 import random
 import string
+import time
 from datetime import datetime
 
 # PIP libraries
@@ -288,7 +289,7 @@ def normalized_timestamp(timestamp=None):
 
     # Process data
     if timestamp is None:
-        value = (int(datetime.utcnow().timestamp()) // interval) * interval
+        value = (int(time.time()) // interval) * interval
     else:
         value = (int(timestamp) // interval) * interval
     # Return
