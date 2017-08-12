@@ -1,4 +1,7 @@
 from distutils.core import setup
+from setuptools import find_packages
+
+from maintenance.database import DatabaseSetup
 
 install_requires = [
     "Flask",
@@ -28,6 +31,9 @@ setup(
     url="https://github.com/PalisadoesFoundation/infoset-ng",
     install_requires=install_requires,
     tests_require=tests_require,
-    packages=['infosetdb', ],
+    packages=find_packages('.'),
     license='Apache License 2',
+    cmdclass={
+        'install': DatabaseSetup,
+    },
 )
