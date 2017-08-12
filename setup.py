@@ -23,7 +23,7 @@ tests_require = [
 
 setup(
     name='Infoset DB',
-    version='2.1.0',
+    version='2.1.1',
     author='Jordan Jones',
     author_email='jordn_jones94@gmail.com',
     maintainer="The Palisadoes Foundation",
