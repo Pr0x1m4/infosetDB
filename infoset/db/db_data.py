@@ -180,20 +180,15 @@ def last_contacts(ts_start):
     last_contact = defaultdict(lambda: defaultdict(dict))
 
     # Get start and stop times
-    ts_stop = general.normalized_timestamp()
-    if ts_start > ts_stop:
-        ts_start = ts_stop
-    else:
-        ts_start = general.normalized_timestamp(ts_start)
+    ts_stop = ts_start - 3600
 
     # Establish a database session
     database = db.Database()
     session = database.session()
     result = session.query(
         Data.value, Data.idx_datapoint, Data.timestamp).filter(
-            and_(Data.timestamp >= ts_start, Data.timestamp <= ts_stop)
-        )
-
+            and_(Data.timestamp <= ts_start, Data.timestamp >= ts_stop)
+    )
     # Add to the list of device idx values
     for instance in result:
         idx_datapoint = instance.idx_datapoint
@@ -259,7 +254,7 @@ def last_contacts_by_device(idx_deviceagent, ts_start):
                 Datapoint.idx_datapoint == Data.idx_datapoint,
                 Data.timestamp >= ts_start,
                 Data.timestamp <= ts_stop)
-        )
+    )
 
     # Add to the list of device idx values
     for instance in result:

@@ -35,8 +35,8 @@ def lastcontacts():
     # Get starting timestamp
     secondsago = general.integerize(request.args.get('secondsago'))
     timestamp = general.integerize(request.args.get('ts_start'))
-    ts_start = _ts_start(secondsago, timestamp)
 
+    ts_start = general.normalized_timestamp()
     # Get data
     data = db_data.last_contacts(ts_start)
 
