@@ -3,7 +3,6 @@ flask
 celery==4.0.2
 setuptools
 Flask-RESTful
-Flask-Caching
 gunicorn
 mock
 numpy

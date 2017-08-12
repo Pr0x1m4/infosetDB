@@ -2,7 +2,6 @@
 
 # Import PIP3 libraries
 from flask import Flask
-from flask_caching import Cache
 
 #############################################################################
 # Import configuration.
@@ -17,9 +16,6 @@ from infoset.utils import redis
 REDIS = redis.Redis()
 
 # Configure the cache
-CACHE = Cache(config={
-    'CACHE_TYPE': 'memcached',
-    'CACHE_DEFAULT_TIMEOUT': CONFIG.interval()})
 
 # Define the global URL prefix
 from infoset.constants import API_PREFIX
@@ -37,7 +33,6 @@ from infoset.api.resources.deviceagents import DEVICEAGENTS
 
 # Setup API and intialize the cache
 API = Flask(__name__)
-CACHE.init_app(API)
 
 # Register Blueprints
 API.register_blueprint(POST, url_prefix=API_PREFIX)

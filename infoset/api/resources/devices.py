@@ -8,14 +8,13 @@ from flask import Blueprint, jsonify
 # Infoset-ng imports
 from infoset.db import db_device
 from infoset.db import db_deviceagent
-from infoset.api import CACHE
 
 # Define the DEVICES global variable
 DEVICES = Blueprint('DEVICES', __name__)
 
 
 @DEVICES.route('/devices/<int:value>')
-@CACHE.cached()
+
 def db_getidxdevice(value):
     """Get device data from the DB by idx value.
 
@@ -38,7 +37,7 @@ def db_getidxdevice(value):
 
 
 @DEVICES.route('/devices/<int:value>/agents')
-@CACHE.cached()
+
 def db_deviceagent_agentindices(value):
     """Get all agent indices from the DB.
 

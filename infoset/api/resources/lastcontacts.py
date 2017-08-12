@@ -14,14 +14,14 @@ from infoset.db import db_data
 from infoset.db import db_device
 from infoset.db import db_deviceagent
 from infoset.db import db_multitable
-from infoset.api import CACHE, CONFIG
+from infoset.api import CONFIG
 
 # Define the LASTCONTACTS global variable
 LASTCONTACTS = Blueprint('LASTCONTACTS', __name__)
 
 
 @LASTCONTACTS.route('/lastcontacts')
-@CACHE.cached()
+
 def lastcontacts():
     """Get last contact data from the DB.
 
@@ -45,7 +45,7 @@ def lastcontacts():
 
 
 @LASTCONTACTS.route('/lastcontacts/id_agents')
-@CACHE.cached()
+
 def id_agents():
     """Get last contact data from the DB.
 
@@ -109,7 +109,7 @@ def id_agents():
 
 
 @LASTCONTACTS.route('/lastcontacts/deviceagents/<int:value>')
-@CACHE.cached()
+
 def deviceagents(value):
     """Get last contact data from the DB.
 
@@ -139,7 +139,7 @@ def deviceagents(value):
 @LASTCONTACTS.route(
     '/lastcontacts/devicenames/<string:devicename>/'
     'id_agents/<string:id_agent>')
-@CACHE.cached()
+
 def devicename_agents(devicename, id_agent):
     """Get last contact data from the DB.
 
