@@ -9,6 +9,7 @@ Manages connection pooling among other things.
 import sys
 import os
 
+from distutils.command.build import build as BuildCommand
 # PIP3 imports
 try:
     import yaml
@@ -56,22 +57,8 @@ from infoset.db import db
 from maintenance import shared
 
 
-class _DatabaseSetup(object):
+class DatabaseSetup(BuildCommand):
     """Class to setup database."""
-
-    def __init__(self):
-        """Function for intializing the class.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        """
-        # Initialize key variables
-        self.reserved = '_SYSTEM_RESERVED_'
-        self.config = configuration.Config()
 
     def _insert_datapoint(self):
         """Insert first datapoint in the database.
@@ -212,6 +199,12 @@ class _DatabaseSetup(object):
             None
 
         """
+        # Needed to run install subcommand
+        # https://stackoverflow.com/questions/1321270/how-to-extend-distutils-with-a-simple-post-install-script/1321345#1321345
+        BuildCommand.run(self)
+
+        self.reserved = '_SYSTEM_RESERVED_'
+        self.config = configuration.Config()
         # Initialize key variables
         use_mysql = True
         pool_size = 25
@@ -254,25 +247,3 @@ class _DatabaseSetup(object):
             self._insert_department()
             self._insert_datapoint()
             self._insert_config()
-
-
-def run():
-    """Setup infoset-ng.
-
-    Args:
-        None
-
-    Returns:
-        None
-
-    """
-    # Run server setup
-    _DatabaseSetup().run()
-
-    # All done
-    shared.print_ok('Database installation successful.')
-
-
-if __name__ == '__main__':
-    # Run setup
-    run()
