@@ -7,7 +7,7 @@ from flask import Blueprint
 STATUS = Blueprint('STATUS', __name__)
 
 
-@STATUS.route('/status')
+@STATUS.route('/')
 def index():
     """Function for handling home route.
 
