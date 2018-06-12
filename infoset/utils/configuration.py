@@ -279,11 +279,11 @@ class Config(object):
         sub_key = 'bind_port'
         intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
 
-        # Default to 6000
+        # Default to 8000
         if intermediate is None:
-            result = 6000
+            result = 8000
         else:
-            result = int(intermediate)
+            result = 8000#int(intermediate)
         return result
 
     def ingest_pool_size(self):

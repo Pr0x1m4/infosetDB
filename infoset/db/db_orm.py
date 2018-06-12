@@ -12,9 +12,15 @@ from sqlalchemy.dialects.sqlite import DATETIME, INTEGER
 from sqlalchemy.dialects.sqlite import NUMERIC, BLOB
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
+from sqlalchemy import *
+from sqlalchemy.orm import (scoped_session, sessionmaker, relationship,
+                            backref)
+
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False))
 
 BASE = declarative_base()
-
+BASE.query = db_session.query_property()
 
 class Device(BASE):
     """Class defining the iset_device table of the database."""
@@ -184,17 +190,17 @@ class Datapoint(BASE):
         server_default='1')
 
     id_datapoint = Column(
-        BLOB, unique=True, nullable=True, default=None)
+        INTEGER(), unique=True, nullable=True, default=None)
 
-    agent_label = Column(BLOB, nullable=True, default=None)
+    agent_label = Column(INTEGER(), nullable=True, default=None)
 
-    agent_source = Column(BLOB, nullable=True, default=None)
+    agent_source = Column(INTEGER(), nullable=True, default=None)
 
     enabled = Column(INTEGER(), server_default='1')
 
     billable = Column(INTEGER(), server_default='0')
 
-    timefixed_value = Column(BLOB, nullable=True, default=None)
+    timefixed_value = Column(INTEGER(), nullable=True, default=None)
 
     base_type = Column(INTEGER(), server_default='1')
 
