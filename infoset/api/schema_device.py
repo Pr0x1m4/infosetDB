@@ -1,13 +1,14 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from infoset.api import graphene_utils
+from infoset.utils import graphene_utils
 from infoset.db.db_orm import db_session, Device as DeviceModel
 from datetime import datetime
 
+
 class DeviceAttribute:
-    
-    idx_device =  graphene.ID(description="")
+
+    idx_device = graphene.ID(description="")
     devicename = graphene.String(description="")
     description = graphene.String(description="")
     enabled = graphene.Float(description="")
@@ -38,7 +39,6 @@ class CreateDevice(graphene.Mutation):
         data = graphene_utils.input_to_dictionary(input)
         data['ts_created'] = datetime.utcnow()
         data['ts_modified'] = datetime.utcnow()
-        
 
         _device = DeviceModel(**data)
         db_session.add(_device)
@@ -46,12 +46,16 @@ class CreateDevice(graphene.Mutation):
 
         return CreateDevice(_device=_device)
 
+
 class UpdateDeviceInput(graphene.InputObjectType, DeviceAttribute):
 
-    _device = graphene.ID(required=True, description="Unique identifier of the Device")
+    _device = graphene.ID(
+        required=True, description="Unique identifier of the Device")
+
 
 class UpdateDevice(graphene.Mutation):
-    _device = graphene.Field(lambda: Device, description="Device updated by this mutation.")
+    _device = graphene.Field(
+        lambda: Device, description="Device updated by this mutation.")
 
     class Arguments:
         input = UpdateDeviceInput(required=True)
@@ -63,6 +67,7 @@ class UpdateDevice(graphene.Mutation):
         _device = db_session.query(DeviceModel).filter_by(id=data['id'])
         _device.update(data)
         db_session.commit()
-        _device = db_session.query(DeviceModel).filter_by(id=data['id']).first()
+        _device = db_session.query(
+            DeviceModel).filter_by(id=data['id']).first()
 
         return UpdateDevice(_device=_device)

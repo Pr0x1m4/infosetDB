@@ -1,13 +1,14 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from infoset.api import graphene_utils
+from infoset.utils import graphene_utils
 from infoset.db.db_orm import db_session, AgentName as AgentNameModel
 from datetime import datetime
 
-class AgentNameAttribute:    
 
-    idx_agentname =  graphene.ID(description="")
+class AgentNameAttribute:
+
+    idx_agentname = graphene.ID(description="")
     name = graphene.String(description="")
     enabled = graphene.Float(description="")
     ts_modified = graphene.DateTime(description="")
@@ -44,13 +45,16 @@ class CreateAgentName(graphene.Mutation):
 
         return CreateAgentName(_agentname=_agentname)
 
+
 class UpdateAgentNameInput(graphene.InputObjectType, AgentNameAttribute):
 
-    _agentname = graphene.ID(required=True, description="Unique identifier of the AgentName")
-    
+    _agentname = graphene.ID(
+        required=True, description="Unique identifier of the AgentName")
+
 
 class UpdateAgentName(graphene.Mutation):
-    _agentname = graphene.Field(lambda: AgentName, description="AgentName updated by this mutation.")
+    _agentname = graphene.Field(
+        lambda: AgentName, description="AgentName updated by this mutation.")
 
     class Arguments:
         input = UpdateAgentNameInput(required=True)
@@ -61,6 +65,7 @@ class UpdateAgentName(graphene.Mutation):
         _agentname = db_session.query(AgentNameModel).filter_by(id=data['id'])
         _agentname.update(data)
         db_session.commit()
-        _agentname = db_session.query(AgentNameModel).filter_by(id=data['id']).first()
+        _agentname = db_session.query(
+            AgentNameModel).filter_by(id=data['id']).first()
 
         return UpdateAgentName(_agentname=_agentname)

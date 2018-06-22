@@ -1,9 +1,10 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from infoset.api import graphene_utils
+from infoset.utils import graphene_utils
 from infoset.db.db_orm import db_session, Data as DataModel
 from datetime import datetime
+
 
 class DataAttribute:
     idx_datapoint = graphene.ID(description="")
@@ -38,13 +39,16 @@ class CreateData(graphene.Mutation):
 
         return CreateData(_data=_data)
 
+
 class UpdateDataInput(graphene.InputObjectType, DataAttribute):
 
-    id = graphene.ID(required=True, description="Unique identifier of the Data")
-    
+    id = graphene.ID(
+        required=True, description="Unique identifier of the Data")
+
 
 class UpdateData(graphene.Mutation):
-    _data = graphene.Field(lambda: Data, description="Data updated by this mutation.")
+    _data = graphene.Field(
+        lambda: Data, description="Data updated by this mutation.")
 
     class Arguments:
         input = UpdateDataInput(required=True)

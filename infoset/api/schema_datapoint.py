@@ -1,9 +1,10 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from infoset.api import graphene_utils
 from infoset.db.db_orm import db_session, Datapoint as DatapointModel
+from infoset.utils import graphene_utils
 from datetime import datetime
+
 
 class DatapointAttribute:
     idx_datapoint = graphene.ID(description="")
@@ -26,7 +27,7 @@ class Datapoint(SQLAlchemyObjectType, DatapointAttribute):
     class Meta:
         model = DatapointModel
         interfaces = (relay.Node, )
-        
+
 
 class DatapointInput(graphene.InputObjectType, DatapointAttribute):
     """Arguments to create datapoint."""
@@ -49,14 +50,17 @@ class CreateDatapoint(graphene.Mutation):
         db_session.commit()
 
         return CreateDatapoint(_datapoint=_datapoint)
-    
+
 
 class UpdateDatapointInput(graphene.InputObjectType, DatapointAttribute):
 
-    id = graphene.ID(required=True, description="Unique identifier of the Datapoint")
+    id = graphene.ID(
+        required=True, description="Unique identifier of the Datapoint")
+
 
 class UpdateDatapoint(graphene.Mutation):
-    _datapoint = graphene.Field(lambda: Datapoint, description="Datapoint updated by this mutation.")
+    _datapoint = graphene.Field(
+        lambda: Datapoint, description="Datapoint updated by this mutation.")
 
     class Arguments:
         input = UpdateDatapointInput(required=True)
@@ -68,6 +72,7 @@ class UpdateDatapoint(graphene.Mutation):
         _datapoint = db_session.query(DatapointModel).filter_by(id=data['id'])
         _datapoint.update(data)
         db_session.commit()
-        _datapoint = db_session.query(DatapointModel).filter_by(id=data['id']).first()
+        _datapoint = db_session.query(
+            DatapointModel).filter_by(id=data['id']).first()
 
         return UpdateDatapoint(_datapoint=_datapoint)
