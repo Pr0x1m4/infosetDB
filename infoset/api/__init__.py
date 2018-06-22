@@ -34,7 +34,7 @@ from infoset.api.resources.deviceagents import DEVICEAGENTS
 from flask_graphql import GraphQLView
 
 from infoset.db.db_orm import db_session
-from infoset.api.gqlschema import schema, Datapoint
+from infoset.api.schema import schema, Datapoint
 
 # Setup API and intialize the cache
 API = Flask(__name__)
