@@ -5,7 +5,7 @@ import os
 # Try to create a working PYTHONPATH
 _DOCKER_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(os.path.join(_DOCKER_DIRECTORY, os.pardir))
-if _DOCKER_DIRECTORY.endswith('/infoset-ng/docker') is True:
+if _DOCKER_DIRECTORY.endswith('/infosetDB/docker') is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
     print(
