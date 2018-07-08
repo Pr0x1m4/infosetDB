@@ -2,7 +2,7 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from infoset.utils import graphene_utils
-from infoset.db.db_orm import db_session, DeviceAgent as DeviceAgentModel
+from infoset.db.db_orm import SESSION, DeviceAgent as DeviceAgentModel
 from datetime import datetime
 
 
@@ -42,8 +42,8 @@ class CreateDeviceAgent(graphene.Mutation):
         data['ts_modified'] = datetime.utcnow()
 
         _deviceagent = DeviceAgentModel(**data)
-        db_session.add(_deviceagent)
-        db_session.commit()
+        SESSION.add(_deviceagent)
+        SESSION.commit()
 
         return CreateDeviceAgent(_deviceagent=_deviceagent)
 
@@ -64,11 +64,11 @@ class UpdateDeviceAgent(graphene.Mutation):
     def mutate(self, info, input):
         data = graphene_utils.input_to_dictionary(input)
         data['ts_modified'] = datetime.utcnow()
-        _deviceagent = db_session.query(
+        _deviceagent = SESSION.query(
             DeviceAgentModel).filter_by(id=data['id'])
         _deviceagent.update(data)
-        db_session.commit()
-        _deviceagent = db_session.query(
+        SESSION.commit()
+        _deviceagent = SESSION.query(
             DeviceAgentModel).filter_by(id=data['id']).first()
 
         return UpdateDeviceAgent(_deviceagent=_deviceagent)

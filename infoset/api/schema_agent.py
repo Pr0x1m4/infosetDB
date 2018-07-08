@@ -2,7 +2,7 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from infoset.utils import graphene_utils
-from infoset.db.db_orm import db_session, Agent as AgentModel
+from infoset.db.db_orm import SESSION, Agent as AgentModel
 from datetime import datetime
 
 
@@ -41,8 +41,8 @@ class CreateAgent(graphene.Mutation):
         data['ts_modified'] = datetime.utcnow()
 
         _agent = AgentModel(**data)
-        db_session.add(_agent)
-        db_session.commit()
+        SESSION.add(_agent)
+        SESSION.commit()
 
         return CreateAgent(_agent=_agent)
 
@@ -63,9 +63,9 @@ class UpdateAgent(graphene.Mutation):
     def mutate(self, info, input):
         data = graphene_utils.input_to_dictionary(input)
         data['ts_modified'] = datetime.utcnow()
-        _agent = db_session.query(AgentModel).filter_by(id=data['id'])
+        _agent = SESSION.query(AgentModel).filter_by(id=data['id'])
         _agent.update(data)
-        db_session.commit()
-        _agent = db_session.query(AgentModel).filter_by(id=data['id']).first()
+        SESSION.commit()
+        _agent = SESSION.query(AgentModel).filter_by(id=data['id']).first()
 
         return UpdateAgent(_agent=_agent)

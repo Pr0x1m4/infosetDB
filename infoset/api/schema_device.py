@@ -2,7 +2,7 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from infoset.utils import graphene_utils
-from infoset.db.db_orm import db_session, Device as DeviceModel
+from infoset.db.db_orm import SESSION, Device as DeviceModel
 from datetime import datetime
 
 
@@ -41,8 +41,8 @@ class CreateDevice(graphene.Mutation):
         data['ts_modified'] = datetime.utcnow()
 
         _device = DeviceModel(**data)
-        db_session.add(_device)
-        db_session.commit()
+        SESSION.add(_device)
+        SESSION.commit()
 
         return CreateDevice(_device=_device)
 
@@ -64,10 +64,10 @@ class UpdateDevice(graphene.Mutation):
         data = graphene_utils.input_to_dictionary(input)
         data['ts_modified'] = datetime.utcnow()
 
-        _device = db_session.query(DeviceModel).filter_by(id=data['id'])
+        _device = SESSION.query(DeviceModel).filter_by(id=data['id'])
         _device.update(data)
-        db_session.commit()
-        _device = db_session.query(
+        SESSION.commit()
+        _device = SESSION.query(
             DeviceModel).filter_by(id=data['id']).first()
 
         return UpdateDevice(_device=_device)

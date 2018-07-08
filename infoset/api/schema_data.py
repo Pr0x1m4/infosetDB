@@ -2,14 +2,14 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from infoset.utils import graphene_utils
-from infoset.db.db_orm import db_session, Data as DataModel
+from infoset.db.db_orm import SESSION, Data as DataModel
 from datetime import datetime
 
 
 class DataAttribute:
     idx_datapoint = graphene.ID(description="")
     timestamp = graphene.Float(description="")
-    value = graphene.Int(description="")
+    value = graphene.Float(description="")
 
 
 class Data(SQLAlchemyObjectType, DataAttribute):
@@ -34,8 +34,8 @@ class CreateData(graphene.Mutation):
     def mutate(self, info, input):
         data = graphene_utils.input_to_dictionary(input)
         _data = DataModel(**data)
-        db_session.add(_data)
-        db_session.commit()
+        SESSION.add(_data)
+        SESSION.commit()
 
         return CreateData(_data=_data)
 
@@ -55,9 +55,9 @@ class UpdateData(graphene.Mutation):
 
     def mutate(self, info, input):
         data = graphene_utils.input_to_dictionary(input)
-        _data = db_session.query(DataModel).filter_by(id=data['id'])
+        _data = SESSION.query(DataModel).filter_by(id=data['id'])
         _data.update(data)
-        db_session.commit()
-        _data = db_session.query(DataModel).filter_by(id=data['id']).first()
+        SESSION.commit()
+        _data = SESSION.query(DataModel).filter_by(id=data['id']).first()
 
         return UpdateData(_data=_data)

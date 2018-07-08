@@ -1,7 +1,7 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from infoset.db.db_orm import db_session, Datapoint as DatapointModel
+from infoset.db.db_orm import SESSION, Datapoint as DatapointModel
 from infoset.utils import graphene_utils
 from datetime import datetime
 
@@ -46,8 +46,8 @@ class CreateDatapoint(graphene.Mutation):
         data = graphene_utils.input_to_dictionary(input)
         data['ts_created'] = datetime.utcnow()
         _datapoint = DatapointModel(**data)
-        db_session.add(_datapoint)
-        db_session.commit()
+        SESSION.add(_datapoint)
+        SESSION.commit()
 
         return CreateDatapoint(_datapoint=_datapoint)
 
@@ -69,10 +69,10 @@ class UpdateDatapoint(graphene.Mutation):
         data = graphene_utils.input_to_dictionary(input)
         data['edited'] = datetime.utcnow()
 
-        _datapoint = db_session.query(DatapointModel).filter_by(id=data['id'])
+        _datapoint = SESSION.query(DatapointModel).filter_by(id=data['id'])
         _datapoint.update(data)
-        db_session.commit()
-        _datapoint = db_session.query(
+        SESSION.commit()
+        _datapoint = SESSION.query(
             DatapointModel).filter_by(id=data['id']).first()
 
         return UpdateDatapoint(_datapoint=_datapoint)

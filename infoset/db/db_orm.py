@@ -12,23 +12,17 @@ from sqlalchemy.dialects.sqlite import DATETIME, INTEGER
 from sqlalchemy.dialects.sqlite import NUMERIC, BLOB
 from sqlalchemy import Column, String
 from sqlalchemy import ForeignKey
-from sqlalchemy import create_engine
-import os
+from infoset.db import POOL, ENGINE
 from sqlalchemy.orm import (scoped_session, sessionmaker, relationship,
                             backref)
+import os
 
-db_name = 'database.db'
-db_path = os.path.join(os.path.dirname(__file__), db_name)
-db_uri = "sqlite:///{}".format(db_path)
-engine = create_engine(db_uri, convert_unicode=True)
-
-
-db_session = scoped_session(sessionmaker(bind=engine,expire_on_commit=False,autocommit=False,
-                                         autoflush=False))
+SESSION = scoped_session(POOL)
 
 BASE = declarative_base()
-BASE.metadata.bind = engine
-BASE.query = db_session.query_property()
+BASE.metadata.bind = ENGINE
+
+BASE.query = SESSION.query_property()
 
 
 class Device(BASE):
@@ -48,9 +42,9 @@ class Device(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True)
 
-    devicename = Column(String, nullable=True, default=None)#BLOB
+    devicename = Column(String, nullable=True, default=None)  # BLOB
 
-    description = Column(String, nullable=True, default=None)#BLOB
+    description = Column(String, nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -134,7 +128,7 @@ class Agent(BASE):
         INTEGER(), ForeignKey('iset_agentname.idx_agentname'),
         nullable=False, server_default='1')
 
-    id_agent = Column(String, unique=True, nullable=True, default=None)#BLOB
+    id_agent = Column(String, unique=True, nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -161,7 +155,7 @@ class AgentName(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True)
 
-    name = Column(String, nullable=True, default=None)#BLOB
+    name = Column(String, nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 

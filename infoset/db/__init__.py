@@ -17,13 +17,13 @@ from sqlalchemy import exc
 # Infoset libraries
 from infoset.utils import configuration
 from infoset.utils import log
-from infoset.db import db_orm
 
 #############################################################################
 # Setup a global pool for database connections
 #############################################################################
 POOL = None
 URL = None
+ENGINE = None
 TEST_ENGINE = None
 
 
@@ -41,6 +41,7 @@ def main():
     use_mysql = True
     global POOL
     global URL
+    global ENGINE
     global TEST_ENGINE
 
     # Get configuration
@@ -57,16 +58,16 @@ def main():
             config.db_file())
 
         # Add MySQL to the pool
-        db_engine = create_engine(
+        ENGINE = create_engine(
             URL, echo=False)
 
         # Fix for multiprocessing
-        _add_engine_pidguard(db_engine)
+        _add_engine_pidguard(ENGINE)
 
         POOL = sessionmaker(
             autoflush=True,
             autocommit=False,
-            bind=db_engine
+            bind=ENGINE
         )
 
     else:
@@ -74,7 +75,7 @@ def main():
 
     # Populate the test engine if this is a test database
     if config.db_name().startswith('test_') is True:
-        TEST_ENGINE = db_engine
+        TEST_ENGINE = ENGINE
 
 
 def create_sqlite_if_not_exist(config):
