@@ -33,7 +33,7 @@ from infoset.api.resources.deviceagents import DEVICEAGENTS
 
 from flask_graphql import GraphQLView
 
-from infoset.db.db_orm import db_session
+from infoset.db.db_orm import SESSION
 from infoset.api.schema import schema, Datapoint
 
 # Setup API and intialize the cache
@@ -45,13 +45,16 @@ API.add_url_rule(
     view_func=GraphQLView.as_view(
         'graphql',
         schema=schema,
-        graphiql=True # for having the GraphiQL interface
+        graphiql=True  # for having the GraphiQL interface
     )
 )
 
+
 @API.teardown_appcontext
 def shutdown_session(exception=None):
-    db_session.remove()
+    SESSION.remove()
+
+
 # Register Blueprints
 API.register_blueprint(POST, url_prefix=API_PREFIX)
 API.register_blueprint(STATUS, url_prefix=API_PREFIX)
@@ -61,5 +64,3 @@ API.register_blueprint(LASTCONTACTS, url_prefix=API_PREFIX)
 API.register_blueprint(DEVICES, url_prefix=API_PREFIX)
 API.register_blueprint(DEVICEAGENTS, url_prefix=API_PREFIX)
 API.register_blueprint(CONFIG_PAGE, url_prefix=API_PREFIX)
-
-
