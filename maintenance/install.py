@@ -14,7 +14,7 @@ import getpass
 _MAINT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(
     os.path.join(_MAINT_DIRECTORY, os.pardir))
-if _ROOT_DIRECTORY.endswith('/infoset-ng') is True:
+if _ROOT_DIRECTORY.endswith('/infosetDB') is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
     print(
