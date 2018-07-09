@@ -473,39 +473,6 @@ def run():
         None
 
     """
-    # Initialize key variables
-    username = getpass.getuser()
-
-    # Prevent running as sudo user
-    if 'SUDO_UID' in os.environ:
-        log_message = (
-            'Cannot run setup using "sudo". Run as a regular user to '
-            'install in this directory or as user "root".')
-        log.log2die_safe(1032, log_message)
-
-    # If running as the root user, then the infoset user needs to exist
-    if username == 'root':
-        try:
-            daemon_username = input(
-                'Please enter the username under which '
-                'infoset-ng will run: ')
-
-            # Get GID and UID for user
-            _ = getpwnam(daemon_username).pw_gid
-        except:
-            log_message = (
-                'User {} not found. Please try again.'
-                ''.format(daemon_username))
-            log.log2die_safe(1022, log_message)
-    else:
-        daemon_username = username
-
-    # Create a configuration only if unittests are not being run
-    if 'INFOSET_CONFIGDIR' not in os.environ:
-        config = _ConfigCreate(daemon_username)
-        config.validate()
-        config.write()
-
     # Determine whether version of python is valid
     _PythonSetupPackages().run()
 
