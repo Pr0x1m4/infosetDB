@@ -1,19 +1,17 @@
 infoset:
+  command: python docker/api.py
   build: .
   ports:
-    - "6000:6000"
+    - "8000:8000"
   links:
     - redis
+    - celery
   hostname: localhost
-  environment:
-    PYTHONPATH: /infoset-ng
 celery:
   build: .
   command: celery worker -A infoset.api.post.celery --loglevel=debug
   links:
     - redis
-  volumes:
-    - ./:/infoset-ng
 redis:
   hostname: localhost
   image: redis:latest
