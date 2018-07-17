@@ -7,6 +7,7 @@ import os
 # Import project libraries
 from infoset.utils import general
 from infoset.utils import log
+import infoset.env as env
 
 
 class Config(object):
@@ -22,38 +23,6 @@ class Config(object):
             None
 
         """
-        # Initialize key variables
-        directories = general.config_directories()
-        self.config_dict = general.read_yaml_files(directories)
-        self.config_directory = directories[0]
-
-    def configuration_directory(self):
-        """Determine the configuration_directory.
-
-        Args:
-            None
-
-        Returns:
-            value: configured configuration_directory
-
-        """
-        # Initialize key variables
-        value = self.config_directory
-        return value
-
-    def configuration(self):
-        """Return configuration.
-
-        Args:
-            None
-
-        Returns:
-            value: configuration
-
-        """
-        # Initialize key variables
-        value = self.config_dict
-        return value
 
     def db_file(self):
         """Determine the SQLite database file.
@@ -65,15 +34,8 @@ class Config(object):
             value: configured SQLite db_file
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'db_file'
-
-        # Process configuration
-        value = _key_sub_key(key, sub_key, self.config_dict)
-
         # Return
-        return value
+        return env.DB_FILE
 
     def ingest_cache_directory(self):
         """Determine the ingest_cache_directory.
@@ -85,18 +47,14 @@ class Config(object):
             value: configured ingest_cache_directory
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'ingest_cache_directory'
-
-        # Process configuration
-        value = _key_sub_key(key, sub_key, self.config_dict)
+        # Get cache directory
+        value = env.CACHE_DIRECTORY
 
         # Check if value exists
         if os.path.isdir(value) is False:
             log_message = (
-                'ingest_cache_directory: "%s" '
-                'in configuration doesn\'t exist!') % (value)
+                'CACHE_DIRECTORY: "%s" '
+                'does not exist.') % (value)
             log.log2die(1011, log_message)
 
         # Return
@@ -132,12 +90,9 @@ class Config(object):
             result: result
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'db_name'
 
         # Process configuration
-        result = _key_sub_key(key, sub_key, self.config_dict)
+        result = env.DB_NAME
 
         # Get result
         return result
@@ -152,15 +107,8 @@ class Config(object):
             result: result
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'db_username'
-
-        # Process configuration
-        result = _key_sub_key(key, sub_key, self.config_dict)
-
         # Get result
-        return result
+        return env.DB_USERNAME
 
     def db_password(self):
         """Get db_password.
@@ -172,15 +120,9 @@ class Config(object):
             result: result
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'db_password'
-
-        # Process configuration
-        result = _key_sub_key(key, sub_key, self.config_dict)
 
         # Get result
-        return result
+        return env.DB_PASSWORD
 
     def db_hostname(self):
         """Get db_hostname.
@@ -192,15 +134,8 @@ class Config(object):
             result: result
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'db_hostname'
-
-        # Process configuration
-        result = _key_sub_key(key, sub_key, self.config_dict)
-
         # Get result
-        return result
+        return env.DB_HOSTNAME
 
     def listen_address(self):
         """Get listen_address.
@@ -212,34 +147,12 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'listen_address'
-        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        result = env.ADDRESS
 
         # Default to 0.0.0.0
         if result is None:
             result = '0.0.0.0'
-        return result
-
-    def username(self):
-        """Get username.
-
-        Args:
-            None
-
-        Returns:
-            result: result
-
-        """
-        # Get result
-        key = 'main'
-        sub_key = 'username'
-        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
-
-        # Default to None
-        if result is None:
-            result = None
         return result
 
     def interval(self):
@@ -252,10 +165,7 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'interval'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        intermediate = env.INTERVAL
 
         # Default to 300
         if intermediate is None:
@@ -274,16 +184,14 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'bind_port'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+
+        intermediate = env.PORT
 
         # Default to 8000
         if intermediate is None:
             result = 8000
         else:
-            result = 8000#int(intermediate)
+            result = 8000  # int(intermediate)
         return result
 
     def ingest_pool_size(self):
@@ -296,10 +204,7 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'ingest_pool_size'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        intermediate = env.INGEST_POOL_SIZE
 
         # Default to 20
         if intermediate is None:
@@ -318,58 +223,13 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'sqlalchemy_pool_size'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        intermediate = env.SQLALCHEMY_POOL_SIZE
 
         # Set default
         if intermediate is None:
             result = 10
         else:
             result = int(intermediate)
-        return result
-
-    def memcached_port(self):
-        """Get memcached_port.
-
-        Args:
-            None
-
-        Returns:
-            result: result
-
-        """
-        # Get result
-        key = 'main'
-        sub_key = 'memcached_port'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
-
-        # Set default
-        if intermediate is None:
-            result = 11211
-        else:
-            result = int(intermediate)
-        return result
-
-    def memcached_hostname(self):
-        """Get memcached_hostname.
-
-        Args:
-            None
-
-        Returns:
-            result: result
-
-        """
-        # Get result
-        key = 'main'
-        sub_key = 'memcached_hostname'
-        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
-
-        # Default to localhost
-        if result is None:
-            result = 'localhost'
         return result
 
     def redis_hostname(self):
@@ -382,10 +242,7 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'redis_hostname'
-        result = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        result = env.REDIS_HOSTNAME
 
         # Default to localhost
         if result is None:
@@ -393,7 +250,7 @@ class Config(object):
         return result
 
     def redis_port(self):
-        """Get memcached_port.
+        """Get redis_port.
 
         Args:
             None
@@ -402,10 +259,7 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'redis_port'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        intermediate = env.REDIS_PORT
 
         # Set default
         if intermediate is None:
@@ -437,10 +291,7 @@ class Config(object):
             result: result
 
         """
-        # Get result
-        key = 'main'
-        sub_key = 'sqlalchemy_max_overflow'
-        intermediate = _key_sub_key(key, sub_key, self.config_dict, die=False)
+        intermediate = env.SQLALCHEMY_MAX_OVERFLOW
 
         # Set default
         if intermediate is None:
@@ -459,12 +310,8 @@ class Config(object):
             value: configured log_directory
 
         """
-        # Initialize key variables
-        key = 'main'
-        sub_key = 'log_directory'
-
         # Process configuration
-        value = _key_sub_key(key, sub_key, self.config_dict)
+        value = env.LOG_DIRECTORY
 
         # Check if value exists
         if os.path.isdir(value) is False:
@@ -525,51 +372,7 @@ class Config(object):
         key = 'main'
 
         # Get new result
-        result = _key_sub_key(key, sub_key, self.config_dict)
+        result = env.LOG_LEVEL
 
         # Return
         return result
-
-
-def _key_sub_key(key, sub_key, config_dict, die=True):
-    """Get config parameter from YAML.
-
-    Args:
-        key: Primary key
-        sub_key: Secondary key
-        config_dict: Dictionary to explore
-        die: Die if true and the result encountered is None
-
-    Returns:
-        result: result
-
-    """
-    # Get result
-    result = None
-
-    # Verify config_dict is indeed a dict.
-    # Die safely as log_directory is not defined
-    if isinstance(config_dict, dict) is False:
-        log.log2die_safe(1021, 'Invalid configuration file. YAML not found')
-
-    # Get new result
-    if key in config_dict:
-        # Make sure we don't have a None value
-        if config_dict[key] is None:
-            log_message = (
-                'Configuration value {}: is blank. Please fix.'
-                ''.format(key))
-            log.log2die_safe(1129, log_message)
-
-        # Get value we need
-        if sub_key in config_dict[key]:
-            result = config_dict[key][sub_key]
-
-    # Error if not configured
-    if result is None and die is True:
-        log_message = (
-            '%s:%s not defined in configuration') % (key, sub_key)
-        log.log2die_safe(1016, log_message)
-
-    # Return
-    return result

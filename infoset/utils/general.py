@@ -12,8 +12,6 @@ import string
 import time
 from datetime import datetime
 
-# PIP libraries
-import yaml
 
 # Infoset libraries
 from infoset.utils import log
