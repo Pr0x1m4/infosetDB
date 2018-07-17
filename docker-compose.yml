@@ -1,19 +1,25 @@
-infoset:
-  command: python docker/api.py
-  build: .
-  ports:
-    - "8000:8000"
-  links:
-    - redis
-    - celery
-  hostname: localhost
-celery:
-  build: .
-  command: celery worker -A infoset.api.post.celery --loglevel=debug
-  links:
-    - redis
-redis:
-  hostname: localhost
-  image: redis:latest
-  ports:
-    - "6379:6379"
+version: '3.2'
+
+services:
+  infoset:
+    command: python docker/api.py
+    build: .
+    ports:
+      - "8000:8000"
+    links:
+      - redis
+      - celery
+    hostname: localhost
+    
+  celery:
+    build: .
+    command: celery worker -A infoset.api.post.celery --loglevel=debug
+    links:
+      - redis
+
+  redis:
+    hostname: localhost
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
