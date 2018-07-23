@@ -26,8 +26,10 @@ pbr==4.0.3
 promise==2.1
 pylint==1.9.1
 PyMySQL==0.8.1
+python-dotenv==0.8.2
 python-memcached==1.59
 pytz==2018.4
+PyYAML==3.12
 redis==2.10.6
 requests==2.18.4
 Rx==1.6.1
