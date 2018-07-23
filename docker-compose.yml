@@ -1,18 +1,18 @@
-version: '3.2'
-
-services:
   infoset:
     command: python docker/api.py
+    env_file: ./infoset/env/api.env
     build: .
     ports:
       - "8000:8000"
     links:
       - redis
       - celery
+      - mysql
     hostname: localhost
     
   celery:
     build: .
+    env_file: ./infoset/env/api.env   
     command: celery worker -A infoset.api.post.celery --loglevel=debug
     links:
       - redis
@@ -23,3 +23,10 @@ services:
     ports:
       - "6379:6379"
 
+  mysql:
+    build: ./docker/mysql/
+    env_file: ./infoset/env/api.env
+    volumes:
+      - ./data/infoset:/var/lib/mysql
+    ports:
+      - "3306:3306"
