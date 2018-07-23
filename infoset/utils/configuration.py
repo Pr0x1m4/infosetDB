@@ -3,6 +3,8 @@
 
 import os.path
 import os
+from os import getenv
+import dotenv
 
 # Import project libraries
 from infoset.utils import general
@@ -23,6 +25,8 @@ class Config(object):
             None
 
         """
+        # Loads curent local env file in this folder
+        dotenv.load_dotenv('./infoset/env/api.env', verbose=True)
 
     def db_file(self):
         """Determine the SQLite database file.
@@ -35,7 +39,7 @@ class Config(object):
 
         """
         # Return
-        return env.DB_FILE
+        return getenv("DB_FILE")
 
     def ingest_cache_directory(self):
         """Determine the ingest_cache_directory.
@@ -48,7 +52,7 @@ class Config(object):
 
         """
         # Get cache directory
-        value = env.CACHE_DIRECTORY
+        value = getenv("CACHE_DIRECTORY")
 
         # Check if value exists
         if os.path.isdir(value) is False:
@@ -92,7 +96,7 @@ class Config(object):
         """
 
         # Process configuration
-        result = env.DB_NAME
+        result = getenv("DB_NAME")
 
         # Get result
         return result
@@ -108,7 +112,7 @@ class Config(object):
 
         """
         # Get result
-        return env.DB_USERNAME
+        return getenv("DB_USERNAME")
 
     def db_password(self):
         """Get db_password.
@@ -122,7 +126,7 @@ class Config(object):
         """
 
         # Get result
-        return env.DB_PASSWORD
+        return getenv("DB_PASSWORD")
 
     def db_hostname(self):
         """Get db_hostname.
@@ -135,7 +139,7 @@ class Config(object):
 
         """
         # Get result
-        return env.DB_HOSTNAME
+        return getenv("DB_HOSTNAME")
 
     def listen_address(self):
         """Get listen_address.
@@ -148,7 +152,7 @@ class Config(object):
 
         """
 
-        result = env.ADDRESS
+        result = getenv("ADDRESS")
 
         # Default to 0.0.0.0
         if result is None:
@@ -165,7 +169,7 @@ class Config(object):
             result: result
 
         """
-        intermediate = env.INTERVAL
+        intermediate = getenv("INTERVAL")
 
         # Default to 300
         if intermediate is None:
@@ -185,7 +189,7 @@ class Config(object):
 
         """
 
-        intermediate = env.PORT
+        intermediate = getenv("PORT")
 
         # Default to 8000
         if intermediate is None:
@@ -204,7 +208,7 @@ class Config(object):
             result: result
 
         """
-        intermediate = env.INGEST_POOL_SIZE
+        intermediate = getenv("INGEST_POOL_SIZE")
 
         # Default to 20
         if intermediate is None:
@@ -223,7 +227,7 @@ class Config(object):
             result: result
 
         """
-        intermediate = env.SQLALCHEMY_POOL_SIZE
+        intermediate = getenv("SQLALCHEMY_POOL_SIZE")
 
         # Set default
         if intermediate is None:
@@ -242,7 +246,7 @@ class Config(object):
             result: result
 
         """
-        result = env.REDIS_HOSTNAME
+        result = getenv("REDIS_HOSTNAME")
 
         # Default to localhost
         if result is None:
@@ -259,7 +263,7 @@ class Config(object):
             result: result
 
         """
-        intermediate = env.REDIS_PORT
+        intermediate = getenv("REDIS_PORT")
 
         # Set default
         if intermediate is None:
@@ -291,7 +295,7 @@ class Config(object):
             result: result
 
         """
-        intermediate = env.SQLALCHEMY_MAX_OVERFLOW
+        intermediate = getenv("SQLALCHEMY_MAX_OVERFLOW")
 
         # Set default
         if intermediate is None:
@@ -311,7 +315,7 @@ class Config(object):
 
         """
         # Process configuration
-        value = env.LOG_DIRECTORY
+        value = getenv("LOG_DIRECTORY")
 
         # Check if value exists
         if os.path.isdir(value) is False:
@@ -335,7 +339,7 @@ class Config(object):
         """
         # Get new result
         # print()
-        #result = ('%s/infoset-ng.log') % (self.log_directory())
+        # result = ('%s/infoset-ng.log') % (self.log_directory())
         result = "./log/infoset-ng.log"
         # Return
         return result
@@ -372,7 +376,7 @@ class Config(object):
         key = 'main'
 
         # Get new result
-        result = env.LOG_LEVEL
+        result = getenv("LOG_LEVEL")
 
         # Return
         return result
