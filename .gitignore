@@ -42,6 +42,7 @@ infoset-db.db
 etc/**
 log/**
 cache/**
+data/infoset/**
 
 # Ignore files in these directories,  _BUT_
 # their subdirectories will be placed in the repository.
@@ -49,7 +50,6 @@ foo/*
 
 # Distribution / packaging
 .Python
-env/
 venv/
 build/
 develop-eggs/
