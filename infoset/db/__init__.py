@@ -54,8 +54,8 @@ def main():
     # Create DB connection pool
     if use_mysql is True:
         create_sqlite_if_not_exist(config)
-        URL = ('sqlite:///%s') % (
-            config.db_file())
+        URL = ('mysql+pymysql://%s:%s@%s/%s') % (
+            config.db_username(), config.db_password(), config.db_hostname(), config.db_name())
 
         # Add MySQL to the pool
         ENGINE = create_engine(

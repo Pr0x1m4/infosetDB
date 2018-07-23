@@ -42,9 +42,9 @@ class Device(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True)
 
-    devicename = Column(String, nullable=True, default=None)  # BLOB
+    devicename = Column(String(100), nullable=True, default=None)  # BLOB
 
-    description = Column(String, nullable=True, default=None)  # BLOB
+    description = Column(String(100), nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -128,7 +128,8 @@ class Agent(BASE):
         INTEGER(), ForeignKey('iset_agentname.idx_agentname'),
         nullable=False, server_default='1')
 
-    id_agent = Column(String, unique=True, nullable=True, default=None)  # BLOB
+    id_agent = Column(String(100), unique=True,
+                      nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -155,7 +156,7 @@ class AgentName(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True)
 
-    name = Column(String, nullable=True, default=None)  # BLOB
+    name = Column(String(100), nullable=True, default=None)  # BLOB
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -233,9 +234,9 @@ class Department(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    code = Column(BLOB, nullable=True, default=None)
+    code = Column(String(100), nullable=True, default=None)
 
-    name = Column(BLOB, nullable=True, default=None)
+    name = Column(String(100), nullable=True, default=None)
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -262,9 +263,9 @@ class Billcode(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    code = Column(BLOB, nullable=True, default=None)
+    code = Column(String(100), nullable=True, default=None)
 
-    name = Column(BLOB, nullable=True, default=None)
+    name = Column(String(100), nullable=True, default=None)
 
     enabled = Column(INTEGER(), server_default='1')
 
@@ -291,9 +292,9 @@ class Configuration(BASE):
         INTEGER(), primary_key=True,
         autoincrement=True, nullable=False)
 
-    config_key = Column(BLOB, nullable=True, default=None)
+    config_key = Column(String(100), nullable=True, default=None)
 
-    config_value = Column(BLOB, nullable=True, default=None)
+    config_value = Column(String(100), nullable=True, default=None)
 
     enabled = Column(INTEGER(), server_default='1')
 
