@@ -72,9 +72,9 @@ class DatabaseSetup(BuildCommand):
         # Insert
         if db_datapoint.idx_datapoint_exists(1) is False:
             record = Datapoint(
-                id_datapoint=general.encode(self.reserved),
-                agent_label=general.encode(self.reserved),
-                agent_source=general.encode(self.reserved)
+                id_datapoint=self.reserved,
+                agent_label=self.reserved,
+                agent_source=self.reserved
             )
             database = db.Database()
             database.add(record, 1047)
@@ -92,8 +92,8 @@ class DatabaseSetup(BuildCommand):
         # Insert
         if db_department.idx_department_exists(1) is False:
             record = Department(
-                code=general.encode(self.reserved),
-                name=general.encode(self.reserved))
+                code=self.reserved,
+                name=self.reserved)
             database = db.Database()
             database.add(record, 1102)
 
@@ -110,8 +110,8 @@ class DatabaseSetup(BuildCommand):
         # Insert
         if db_billcode.idx_billcode_exists(1) is False:
             record = Billcode(
-                code=general.encode(self.reserved),
-                name=general.encode(self.reserved))
+                code=self.reserved,
+                name=self.reserved)
             database = db.Database()
             database.add(record, 1104)
 
@@ -134,7 +134,7 @@ class DatabaseSetup(BuildCommand):
         if db_agentname.idx_agentname_exists(idx_agentname) is False:
             # Generate a name add a record in the database
             record = AgentName(
-                name=general.encode(self.reserved))
+                name=self.reserved)
             database = db.Database()
             database.add(record, 1019)
 
@@ -142,20 +142,20 @@ class DatabaseSetup(BuildCommand):
         if db_agent.idx_agent_exists(idx_agent) is False:
             # Generate an Agent ID and add a record in the database
             record = Agent(
-                id_agent=general.encode(self.reserved))
+                id_agent=self.reserved)
             database = db.Database()
             database.add(record, 1109)
 
-        # Add device
+            # Add device
         if db_device.idx_device_exists(idx_device) is False:
             record = Device(
-                description=general.encode(self.reserved),
-                devicename=general.encode(self.reserved)
+                description=self.reserved,
+                devicename=self.reserved
             )
             database = db.Database()
             database.add(record, 1106)
 
-        # Add to Agent / Device table
+            # Add to Agent / Device table
         if db_deviceagent.device_agent_exists(idx_device, idx_agent) is False:
             record = DeviceAgent(
                 idx_device=idx_device, idx_agent=idx_agent)
@@ -180,13 +180,13 @@ class DatabaseSetup(BuildCommand):
             key = item[0]
             value = item[1]
 
-            # Check if value exists and insert if not
-            if db_configuration.config_key_exists(key) is False:
-                record = Configuration(
-                    config_key=general.encode(key),
-                    config_value=general.encode(value))
-                database = db.Database()
-                database.add(record, 1108)
+        # Check if value exists and insert if not
+        if db_configuration.config_key_exists(key) is False:
+            record = Configuration(
+                config_key=key,
+                config_value=value)
+            database = db.Database()
+            database.add(record, 1108)
 
     def run(self):
         """Setup database.
@@ -213,8 +213,8 @@ class DatabaseSetup(BuildCommand):
         # Create DB connection pool
         if use_mysql is True:
             # Add MySQL to the pool
-            URL = ('sqlite:///%s') % (
-                config.db_file())
+            URL = ('mysql+pymysql://%s:%s@%s/%s') % (config.db_username(),
+                                                     config.db_password(), config.db_hostname(), config.db_name())
 
             engine = create_engine(
                 URL, echo=True,
@@ -241,11 +241,6 @@ class DatabaseSetup(BuildCommand):
             BASE.metadata.create_all(engine)
 
             # Insert database entries
-            self._insert_agent_device()
-            self._insert_billcode()
-            self._insert_department()
-            self._insert_datapoint()
-            self._insert_config()
 
 
 def print_ok(message):

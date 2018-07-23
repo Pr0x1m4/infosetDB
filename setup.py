@@ -13,6 +13,6 @@ setup(
     url="https://github.com/PalisadoesFoundation/infoset-ng",
     license='Apache License 2',
     cmdclass={
-        'db': DatabaseSetup,
+        'migrate': DatabaseSetup,
     },
 )
